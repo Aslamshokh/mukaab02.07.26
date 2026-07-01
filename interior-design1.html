@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUKAAB — Дизайн интерьера</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* ─── RESET ─── */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --gold: #ffffff;
+    --blue: rgba(0, 81, 255, 0.40);
+    --blue-h: #2601faaf;
+    --border: rgba(255,255,255,0.07);
+    --muted: rgba(255,255,255,0.55);
+}
+
+body{
+    background:#050505;
+    color:#fff;
+    font-family:'Montserrat',sans-serif;
+    overflow-x:hidden;
+}
+
+img { width: 100%; display: block; }
+a { text-decoration: none; color: inherit; }
+
+/* NAVBAR */
+
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:90px;
+    padding:0 50px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    z-index:99999;
+    background:rgba(0, 0, 0, 0.185);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(22, 15, 15, 0.103);
+}
+
+/* LEFT */
+
+.nav-left{
+    display:flex;
+    gap:24px;
+}
+
+.nav-left a{
+    color:#fff;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:500;
+    opacity:0.7;
+    transition:0.3s;
+}
+
+.nav-left a:hover{
+    opacity:1;
+}
+
+/* LOGO */
+
+.logo{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+}
+
+.logo img{
+    width:140px;
+    height:auto;
+    display:block;
+    object-fit:contain;
+}
+
+/* RIGHT */
+
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    flex-shrink:0;
+    margin-right:6px;
+}
+.nav-right a{
+    color:#fff;
+    text-decoration:none;
+    font-size:14px;
+    opacity:0.7;
+}
+
+/* LANG */
+
+.lang-switch{
+    display:flex;
+    gap:10px;
+}
+
+.lang-switch button{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.05);
+    color:#ffffff;
+    cursor:pointer;
+    transition:0.3s;
+    font-family:'Montserrat',sans-serif;
+    font-size:13px;
+    font-weight:700;
+}
+
+.lang-switch button.active{
+    background:#1d4ed8;
+}
+
+/* CTA BUTTON */
+
+.nav-cta{
+    height:52px;
+    padding:0 24px;
+    border:none;
+    border-radius:999px;
+    background:linear-gradient(135deg,rgba(0,81,255,.95),rgba(37,99,235,.95));
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+    font-family:'Montserrat',sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:.35s;
+    white-space:nowrap;
+    box-shadow:0 12px 35px rgba(37,99,235,.30);
+}
+
+.nav-cta:hover{
+    transform:translateY(-2px);
+    box-shadow:0 18px 45px rgba(37,99,235,.45);
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+}
+
+/* CONTACT MENU */
+
+.contact-dropdown { position: relative; }
+
+.contact-menu{
+    position:absolute;
+    top:65px;
+    right:0;
+    width:220px;
+    padding:12px;
+    border-radius:22px;
+    background:rgba(10,10,10,0.92);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.08);
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(10px);
+    transition:.35s;
+    z-index:999;
+}
+
+.contact-menu.active{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+}
+
+.contact-menu a{
+    height:50px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    padding:0 18px;
+    background:rgba(255,255,255,.03);
+    color:#fff;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.contact-menu a:hover{
+    background:rgba(0,81,255,.22);
+    transform:translateX(4px);
+}
+
+/* MOBILE MENU CTA */
+
+.mobile-menu-cta{
+    width:100%;
+    height:54px;
+    margin-top:18px;
+    border:none;
+    border-radius:18px;
+    background:linear-gradient(135deg,rgba(0,81,255,.95),rgba(37,99,235,.95));
+    color:#fff;
+    font-size:15px;
+    font-weight:700;
+    font-family:'Montserrat',sans-serif;
+    cursor:pointer;
+    transition:.35s;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 10px 30px rgba(37,99,235,.28);
+}
+
+.mobile-menu-cta:hover{
+    transform:translateY(-2px);
+    box-shadow:0 18px 40px rgba(37,99,235,.42);
+}
+
+/* ─── HERO ─── */
+.hero {
+    position: relative;
+    height: 62vh;
+    min-height: 380px;
+    overflow: hidden;
+}
+
+.hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(.70);
+    transition: transform 8s ease;
+}
+.hero:hover .hero-image { transform: scale(1.04); }
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,.97) 0%,
+        rgba(0,0,0,.30) 55%,
+        transparent 100%
+    );
+}
+
+.hero-content {
+    position: absolute;
+    bottom: 52px;
+    left: 60px;
+    z-index: 2;
+}
+
+.hero-label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: .38em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 14px;
+}
+
+.hero-content h1 {
+    font-size: clamp(40px, 6.5vw, 80px);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+}
+
+.hero-content p {
+    font-size: 15px;
+    color: rgba(255,255,255,.60);
+    max-width: 500px;
+    line-height: 1.7;
+}
+
+/* ─── SERVICES PANEL ─── */
+.services-panel {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 72px 40px 100px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.panel-section-label {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 14px;
+    margin-bottom: 4px;
+}
+
+.panel-section-label span {
+    font-size: 10px;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.panel-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,.07);
+}
+
+/* ─── GLASS CARD ─── */
+.service-box {
+    padding: 30px 28px;
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.025);
+    backdrop-filter: blur(14px);
+    transition: border-color .4s, background .4s;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.service-box:hover {
+    border-color: rgba(0,81,255,.30);
+    background: rgba(0,81,255,.04);
+}
+
+.service-box.featured {
+    border-color: rgba(200,169,110,.28);
+    background: rgba(200,169,110,.03);
+}
+.service-box.featured:hover {
+    border-color: rgba(200,169,110,.55);
+    background: rgba(200,169,110,.07);
+}
+
+.service-box.wide {
+    grid-column: span 2;
+}
+
+.service-box.full {
+    grid-column: 1 / -1;
+}
+
+/* ─── CARD INNER ─── */
+.service-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.service-top h2 {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -.01em;
+}
+
+.price {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: #fff;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.price-sub {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-top: 2px;
+    white-space: nowrap;
+}
+
+.price-block {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+/* list */
+.service-box ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.service-box ul li {
+    font-size: 13px;
+    color: rgba(255,255,255,.62);
+    padding: 8px 0 8px 18px;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    line-height: 1.5;
+}
+.service-box ul li:last-child { border-bottom: none; }
+
+.service-box ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 11px;
+    top: 10px;
+}
+
+/* description text */
+.service-text p,
+.service-description p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.service-text .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    font-size: 13px;
+    color: rgba(255,255,255,.65);
+}
+.service-text .row:last-child { border-bottom: none; }
+.service-text .row .row-price {
+    font-weight: 700;
+    color: #fff;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+/* note badge */
+.premium-note {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(200,169,110,.10);
+    border: 1px solid rgba(200,169,110,.22);
+    color: var(--gold);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    margin-top: 4px;
+    align-self: flex-start;
+}
+
+/* materials grid */
+.materials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.mat-item {
+    padding: 16px;
+    border: 1px solid rgba(255,255,255,.06);
+    background: rgba(255,255,255,.02);
+}
+
+.mat-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.mat-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.55;
+}
+
+/* two-col list */
+.two-col-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+}
+
+/* ─── CTA ─── */
+.cta-row {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 40px 44px;
+    border: 1px solid rgba(255,255,255,.07);
+    background: rgba(255,255,255,.02);
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.cta-row h3 {
+    font-size: clamp(20px, 2.8vw, 30px);
+    font-weight: 800;
+    letter-spacing: -.02em;
+    margin-bottom: 8px;
+}
+
+.cta-row p {
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.cta-btn {
+    height: 52px;
+    padding: 0 34px;
+    border-radius: 50px;
+    background: var(--blue);
+    border: 1px solid rgba(255,255,255,.20);
+    color: #fff;
+    font-size: 15px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .4s;
+    white-space: nowrap;
+    letter-spacing: .04em;
+}
+.cta-btn:hover { background: var(--blue-h); }
+
+/* ─── FOOTER ─── */
+.footer {
+    padding: 36px 40px;
+    border-top: 1px solid rgba(255,255,255,.07);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--muted);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* ─── HAMBURGER ─── */
+.burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0);
+    background: rgba(255,255,255,0);
+    cursor: pointer;
+    z-index: 1001;
+    transition: background .3s;
+    flex-shrink: 0;
+}
+.burger:hover { background: rgba(255,255,255,0.10); }
+.burger span {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform .35s, opacity .35s;
+    transform-origin: center;
+}
+.burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ─── MOBILE MENU ─── */
+.mobile-menu {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    width: 100%;
+    background: rgba(5,5,5,0.98);
+    backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    padding: 28px 24px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transform: translateY(-110%);
+    opacity: 0;
+    transition: transform .4s cubic-bezier(.19,1,.22,1), opacity .35s;
+    z-index: 998;
+    pointer-events: none;
+}
+.mobile-menu.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.mobile-menu a {
+    display: block;
+    color: rgba(255,255,255,.72);
+    font-size: 15px;
+    font-weight: 500;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0);
+    transition: color .25s;
+    letter-spacing: .02em;
+}
+.mobile-menu a:last-of-type { border-bottom: none; }
+.mobile-menu a:hover { color: #fff; }
+
+.mobile-menu-lang {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255,255,255,.07);
+}
+.mobile-menu-lang button {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    transition: .3s;
+}
+.mobile-menu-lang button:hover,
+.mobile-menu-lang button.active {
+    background: rgba(0,81,255,.42);
+    border-color: rgba(0,81,255,.5);
+}
+
+.mobile-contact-dropdown { position: relative; margin-top: 18px; }
+
+.mobile-contact-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+    opacity: 0;
+    visibility: hidden;
+    max-height: 0;
+    overflow: hidden;
+    transition: .35s ease;
+}
+
+.mobile-contact-menu.active {
+    opacity: 1;
+    visibility: visible;
+    max-height: 300px;
+}
+
+.mobile-contact-menu a {
+    height: 52px;
+    border-radius: 16px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.mobile-contact-menu a:hover {
+    background: rgba(0,81,255,.18);
+    border-color: rgba(0,81,255,.28);
+}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1020px){
+    .services-panel {
+        grid-template-columns: 1fr 1fr;
+        padding: 50px 24px 80px;
+    }
+    .service-box.wide { grid-column: span 2; }
+}
+
+@media(max-width:1200px){
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+    }
+    .nav-left  { display: none; }
+    .nav-right { display: none; }
+    .burger    { display: flex; }
+    .logo { margin: 0 auto; position: static; transform: none; }
+}
+
+@media(max-width:680px){
+    .services-panel {
+        grid-template-columns: 1fr;
+        padding: 40px 16px 70px;
+    }
+    .service-box.wide { grid-column: span 1; }
+    .materials-grid { grid-template-columns: 1fr; }
+    .two-col-list { grid-template-columns: 1fr; }
+    .hero-content { left: 24px; bottom: 36px; }
+    .navbar { padding: 0 20px; }
+    .cta-row { padding: 28px 24px; flex-direction: column; align-items: flex-start; }
+    .footer { flex-direction: column; align-items: flex-start; padding: 28px 20px; }
+    .panel-section-label { grid-column: 1; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<header class="navbar" id="navbar">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+        <a href="mukaab.html" data-i18n="nav1">Главная</a>
+        <a href="3d_viz3.html" data-i18n="nav2">3D
+            визуализация</a>
+        <a href="Architecture service2.html" data-i18n="nav3">Архитектура</a>
+    </div>
+
+    <!-- CENTER logo -->
+    <a class="logo" href="mukaab.html">
+        <img src="images/LOGO-2.png" alt="MUKAAB">
+    </a>
+
+    <!-- RIGHT -->
+    <div class="nav-right">
+
+        <a href="services.html" data-i18n="nav4">Услуги</a>
+        <a href="#" data-i18n="nav5m">Портфолио</a>
+
+        <div class="lang-switch">
+            <button onclick="setLang('ru')" id="btn-ru" class="active">RU</button>
+            <button onclick="setLang('en')" id="btn-en">EN</button>
+        </div>
+
+        <div class="contact-dropdown">
+            <button class="nav-cta" onclick="toggleContacts()" data-i18n="navCta">Написать</button>
+            <div class="contact-menu" id="contactMenu">
+                <a href="https://t.me/mukaab_company" target="_blank">Telegram</a>
+                <a href="https://wa.me/375339161111" target="_blank">WhatsApp</a>
+                <a href="mailto:mukaabcompany@gmail.com">Написать нам</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Burger (mobile only) -->
+    <button class="burger" id="burger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+
+</header>
+
+<!-- ── MOBILE MENU ── -->
+<nav class="mobile-menu" id="mobileMenu">
+
+    <a href="mukaab.html" data-i18n="nav1">Главная</a>
+    <a href="3d_viz3.html" data-i18n="nav2">3D
+        визуализация</a>
+    <a href="Architecture service2.html" data-i18n="nav3">Архитектура</a>
+    <a href="services.html" data-i18n="nav4">Услуги</a>
+    <a href="#" data-i18n="nav5m">Портфолио</a>
+
+    <div class="mobile-menu-lang">
+        <button onclick="setLang('ru')" id="mob-btn-ru" class="active">RU</button>
+        <button onclick="setLang('en')" id="mob-btn-en">EN</button>
+    </div>
+
+    <div class="mobile-contact-dropdown">
+        <button class="mobile-menu-cta" onclick="toggleMobileContacts()" data-i18n="navCta">Написать нам</button>
+        <div class="mobile-contact-menu" id="mobileContactMenu">
+            <a href="https://t.me/mukaab_company" target="_blank">Telegram</a>
+            <a href="https://wa.me/375339161111" target="_blank">WhatsApp</a>
+            <a href="mailto:mukaabcompany@gmail.com">Написать нам</a>
+        </div>
+    </div>
+
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" style="margin-top:90px;">
+    <img src="images/1.png" class="hero-image" alt="">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <span class="hero-label" data-i18n="heroLabel">Услуги</span>
+        <h1 data-i18n="title">Дизайн интерьера</h1>
+        <p data-i18n="subtitle">Концепции, рабочая документация и авторский надзор — создаём пространства, которые живут.</p>
+    </div>
+</section>
+
+<!-- ── PANEL ── -->
+<section class="services-panel">
+
+    <!-- ═══ КОНЦЕПЦИЯ И ПРОЕКТ ═══ -->
+    <div class="panel-section-label">
+        <span data-i18n="sec1">Концепция и проектирование</span>
+    </div>
+
+    <!-- Концепт-дизайн -->
+    <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="v1h">Концепт-дизайн</h2>
+            <div class="price-block">
+                <div class="price">15$</div>
+                <div class="price-sub" data-i18n="persqm">/ м²</div>
+            </div>
+        </div>
+        <ul>
+            <li data-i18n="v1a">Планировочное решение</li>
+            <li data-i18n="v1b">Стилевая концепция и мудборд</li>
+            <li data-i18n="v1c">Подбор цветовой палитры</li>
+            <li data-i18n="v1d">Зонирование пространства</li>
+        </ul>
+    </div>
+
+    <!-- Дизайн-проект -->
+    <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="v2h">Дизайн-проект</h2>
+            <div class="price-block">
+                <div class="price">35$</div>
+                <div class="price-sub" data-i18n="persqm">/ м²</div>
+            </div>
+        </div>
+        <ul>
+            <li data-i18n="v2a">Полный комплект чертежей</li>
+            <li data-i18n="v2b">Развёртки стен с отделкой</li>
+            <li data-i18n="v2c">Спецификации материалов и мебели</li>
+            <li data-i18n="v2d">Подбор освещения и декора</li>
+        </ul>
+    </div>
+
+    <!-- Комплексный проект — wide featured -->
+    <div class="service-box wide featured">
+        <div class="service-top">
+            <h2 data-i18n="v3h">Комплексный дизайн-проект</h2>
+            <div class="price-block">
+                <div class="price">55$</div>
+                <div class="price-sub" data-i18n="persqm">/ м²</div>
+            </div>
+        </div>
+        <div class="service-description">
+            <p data-i18n="v3desc">Полный цикл от концепции до авторского надзора:</p>
+        </div>
+        <ul class="two-col-list">
+            <li data-i18n="v3a">Концепция и планировочные решения</li>
+            <li data-i18n="v3b">Полный комплект рабочих чертежей</li>
+            <li data-i18n="v3c">3D-визуализация всех помещений</li>
+            <li data-i18n="v3d">Подбор и комплектация мебели</li>
+            <li data-i18n="v3e">Спецификации отделочных материалов</li>
+            <li data-i18n="v3f">Авторский надзор за строительством</li>
+            <li data-i18n="v3g">Подготовка к ремонту: сметы и графики</li>
+            <li data-i18n="v3h2">Итоговый фотоотчёт объекта</li>
+        </ul>
+    </div>
+
+    <!-- Перепланировка -->
+    <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="v4h">Перепланировка пространства</h2>
+            <div class="price-block">
+                <div class="price">500$</div>
+                <div class="price-sub" data-i18n="perobj">/ объект</div>
+            </div>
+        </div>
+        <ul>
+            <li data-i18n="v4a">Анализ несущих конструкций</li>
+            <li data-i18n="v4b">Несколько планировочных вариантов</li>
+            <li data-i18n="v4c">Согласование с технадзором</li>
+        </ul>
+        <div class="premium-note" data-i18n="v4note">от 500$ за объект</div>
+    </div>
+
+    <!-- ═══ СТИЛИ И КОМПЛЕКТАЦИЯ ═══ -->
+    <div class="panel-section-label">
+        <span data-i18n="sec2">Стили и комплектация</span>
+    </div>
+
+    <!-- Подбор мебели и материалов -->
+    <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="a1h">Подбор мебели и материалов</h2>
+            <div class="price-block">
+                <div class="price">800$</div>
+                <div class="price-sub" data-i18n="perobj">/ объект</div>
+            </div>
+        </div>
+        <div class="service-text">
+            <div class="row"><span data-i18n="a1a">Формирование листа покупок</span></div>
+            <div class="row"><span data-i18n="a1b">Переговоры с поставщиками</span></div>
+            <div class="row"><span data-i18n="a1c">Контроль поставки и качества</span></div>
+            <div class="row"><span data-i18n="a1d">Расстановка и стайлинг помещений</span></div>
+        </div>
+        <div class="premium-note" data-i18n="a1note">от 800$ за объект</div>
+    </div>
+
+    <!-- Авторский надзор — wide -->
+    <div class="service-box wide">
+        <div class="service-top">
+            <h2 data-i18n="a2h">Авторский надзор за реализацией</h2>
+            <div class="price-block">
+                <div class="price" data-i18n="a2price">По запросу</div>
+            </div>
+        </div>
+        <div class="service-text">
+            <div class="row"><span data-i18n="a2a">Регулярные выезды на объект — еженедельно или по требованию</span></div>
+            <div class="row"><span data-i18n="a2b">Проверка соответствия отделки проектной документации</span></div>
+            <div class="row"><span data-i18n="a2c">Оперативное решение спорных вопросов с подрядчиком</span></div>
+            <div class="row"><span data-i18n="a2d">Стоимость рассчитывается индивидуально по объёму объекта</span></div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-row">
+        <div>
+            <h3 data-i18n="ctah">Обсудим ваш интерьер?</h3>
+            <p data-i18n="ctap">Оставьте заявку — свяжемся в течение часа</p>
+        </div>
+        <button class="cta-btn" data-i18n="ctabtn">Оставить заявку</button>
+    </div>
+
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+    <div>© 2026 MUKAAB</div>
+    <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+        <button onclick="openPrivacy()" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer;font-family:'Montserrat',sans-serif;transition:.3s;padding:0;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.4)'" data-i18n="privacyLink">Политика конфиденциальности</button>
+    </div>
+</footer>
+
+<!-- ── PRIVACY MODAL ── -->
+<div id="privacyOverlay" style="
+    position:fixed;inset:0;z-index:9999;
+    background:rgba(0,0,0,0.55);backdrop-filter:blur(16px);
+    display:flex;justify-content:center;align-items:center;
+    opacity:0;visibility:hidden;transition:.35s ease;
+">
+<div id="privacyModal" style="
+    width:min(860px,94vw);height:min(780px,90vh);
+    background:rgba(10,10,10,0.97);
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:6px;
+    display:flex;flex-direction:column;
+    position:relative;
+    transform:translateY(24px) scale(.97);
+    transition:.35s cubic-bezier(.19,1,.22,1);
+    overflow:hidden;
+">
+    <!-- Header -->
+    <div style="padding:28px 36px 20px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;">
+        <div style="font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:#c8a96e;font-weight:700;margin-bottom:10px;" data-i18n="pmLabel">Документ</div>
+        <div style="font-size:22px;font-weight:800;letter-spacing:-.02em;" data-i18n="pmTitle">Политика конфиденциальности</div>
+    </div>
+    <!-- Body -->
+    <div id="pmBody" style="
+        flex:1;overflow-y:auto;padding:28px 36px 36px;
+        scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.12) transparent;
+    ">
+        <!-- injected by JS -->
+    </div>
+    <!-- Close button -->
+    <button onclick="closePrivacy()" style="
+        position:absolute;top:20px;right:20px;
+        width:40px;height:40px;border-radius:50%;
+        border:1px solid rgba(255,255,255,.09);
+        background:rgba(255,255,255,.04);
+        color:rgba(255,255,255,.6);font-size:18px;
+        cursor:pointer;display:flex;align-items:center;justify-content:center;
+        transition:.25s;font-family:'Montserrat',sans-serif;
+    " onmouseover="this.style.transform='rotate(90deg)';this.style.background='rgba(255,255,255,.1)';this.style.color='#fff'"
+       onmouseout="this.style.transform='rotate(0deg)';this.style.background='rgba(255,255,255,.04)';this.style.color='rgba(255,255,255,.6)'">✕</button>
+</div>
+</div>
+
+<script>
+/* ─── PRIVACY MODAL ─── */
+const PM = {
+    ru: {
+        pmLabel: 'Документ',
+        pmTitle: 'Политика конфиденциальности',
+        privacyLink: 'Политика конфиденциальности',
+        body: `
+<style>
+#pmBody h2{font-size:15px;font-weight:700;color:#fff;margin:26px 0 10px;padding-left:14px;border-left:2px solid #c8a96e;}
+#pmBody h2:first-child{margin-top:0;}
+#pmBody p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.85;margin-bottom:10px;}
+#pmBody ul{margin:8px 0 14px 0;list-style:none;}
+#pmBody ul li{font-size:13px;color:rgba(255,255,255,.62);padding:6px 0 6px 18px;position:relative;border-bottom:1px solid rgba(255,255,255,.04);line-height:1.6;}
+#pmBody ul li:last-child{border-bottom:none;}
+#pmBody ul li::before{content:'—';position:absolute;left:0;color:#c8a96e;font-size:11px;top:8px;}
+#pmBody strong{color:#fff;font-weight:600;}
+#pmBody .pm-contacts{padding:20px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);margin:18px 0 10px;border-radius:4px;}
+#pmBody .pm-contacts p{margin-bottom:6px;}
+#pmBody .pm-footer{margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:12px;color:rgba(255,255,255,.35);}
+#pmBody .pm-badge{background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.2);color:#c8a96e;padding:4px 14px;font-size:11px;font-weight:600;letter-spacing:.06em;}
+</style>
+<p><strong>ООО «Мукааб»</strong> (далее — Оператор) уделяет большое значение защите персональных данных пользователей. Настоящая Политика конфиденциальности определяет порядок обработки и меры по обеспечению безопасности информации, предоставленной посетителями сайта <strong>mukaab.by</strong>.</p>
+<h2>1. Общие положения</h2>
+<p>Настоящая Политика конфиденциальности составлена в соответствии с требованиями законодательства Республики Беларусь и определяет обязательства Оператора по неразглашению и обеспечению режима защиты персональных данных, которые пользователь предоставляет при взаимодействии с сайтом.</p>
+<p>Оператор уважает право на неприкосновенность частной жизни и обеспечивает сохранность информации, полученной от посетителей.</p>
+<h2>2. Основные понятия</h2>
+<ul>
+<li><strong>Персональные данные</strong> — любая информация, относящаяся к прямо или косвенно определенному физическому лицу (ФИО, телефон, email и другие).</li>
+<li><strong>Обработка персональных данных</strong> — любое действие (сбор, запись, систематизация, накопление, хранение, уточнение, использование, передача, блокирование, удаление, уничтожение).</li>
+<li><strong>Пользователь</strong> — лицо, которое использует сайт <strong>mukaab.by</strong> и добровольно предоставляет свои персональные данные.</li>
+</ul>
+<h2>3. Персональные данные, которые мы собираем</h2>
+<p>Оператор может обрабатывать следующие персональные данные пользователей:</p>
+<ul>
+<li>имя и фамилия;</li>
+<li>номер телефона;</li>
+<li>адрес электронной почты;</li>
+<li>ссылки на социальные сети (при указании);</li>
+<li>фотографии (если пользователь добровольно передает);</li>
+<li>иные данные, переданные добровольно: <strong>мессенджеры, должность, компания</strong>.</li>
+</ul>
+<p>Кроме того, автоматически собираются технические данные: IP-адрес, сведения о браузере, cookies, информация о действиях на сайте.</p>
+<h2>4. Цели обработки данных</h2>
+<ul>
+<li>обработка заявок и обратной связи;</li>
+<li>предоставление информации об услугах и продуктах;</li>
+<li>подготовка коммерческих предложений;</li>
+<li>улучшение работы сайта, анализ пользовательского опыта;</li>
+<li>маркетинговые и рекламные коммуникации (с согласия пользователя).</li>
+</ul>
+<h2>5. Правовые основания обработки</h2>
+<ul>
+<li>согласие пользователя на обработку персональных данных;</li>
+<li>заключение и исполнение договора, стороной которого является пользователь;</li>
+<li>требования, установленные законодательством Республики Беларусь.</li>
+</ul>
+<h2>6. Условия обработки и передачи данных</h2>
+<p><strong>6.1.</strong> Оператор не передает персональные данные третьим лицам без явного согласия пользователя, за исключением случаев, прямо предусмотренных законом.</p>
+<p><strong>6.2.</strong> Персональные данные могут передаваться сервисам аналитики, CRM-системам, а также подрядчикам: <strong>Яндекс.Метрика, Google Analytics, CRM-система, сервисы email-рассылок</strong>.</p>
+<p><strong>6.3.</strong> При трансграничной передаче данных Оператор обеспечивает их защиту в соответствии с законодательством РБ и международными стандартами.</p>
+<h2>7. Срок хранения данных</h2>
+<p>Персональные данные хранятся <strong>не дольше 3 лет с момента последнего взаимодействия либо до момента отзыва согласия пользователем</strong>. После этого данные подлежат уничтожению или обезличиванию.</p>
+<h2>8. Права пользователя</h2>
+<ul>
+<li>получать информацию, касающуюся обработки его персональных данных;</li>
+<li>требовать уточнения, блокирования или уничтожения своих данных;</li>
+<li>отозвать согласие на обработку персональных данных в любое время;</li>
+<li>обратиться с запросом об ограничении обработки.</li>
+</ul>
+<p>Для реализации своих прав пользователь может направить запрос на: <strong>privacy@mukaab.by</strong>.</p>
+<h2>9. Cookies и аналитика</h2>
+<p><strong>Сайт использует cookies для корректной работы, аналитики и персонализации.</strong> Пользователь может отключить cookies в настройках браузера. Отключение cookies может повлиять на функциональность сайта.</p>
+<p>Cookie-файлы не содержат персональные данные и используются для сбора обезличенной статистики.</p>
+<h2>10. Защита персональных данных</h2>
+<p>Оператор принимает организационные и технические меры для защиты персональных данных от неправомерного или случайного доступа, уничтожения, изменения, копирования, распространения.</p>
+<h2>11. Изменение Политики конфиденциальности</h2>
+<p>Оператор вправе вносить изменения в настоящую Политику. Актуальная версия всегда доступна на сайте <strong>mukaab.by</strong>.</p>
+<div class="pm-contacts">
+<p><strong>12. Контактные данные Оператора</strong></p>
+<p>ООО «Мукааб»</p>
+<p>Email: <strong>privacy@mukaab.by</strong></p>
+<p>г. Минск, ул. Мележа 1, офис 405</p>
+</div>
+<div class="pm-footer">
+<span class="pm-badge">Действующая редакция</span>
+<span>© ООО «Мукааб», все права защищены</span>
+</div>`
+    },
+    en: {
+        pmLabel: 'Document',
+        pmTitle: 'Privacy Policy',
+        privacyLink: 'Privacy Policy',
+        body: `
+<style>
+#pmBody h2{font-size:15px;font-weight:700;color:#fff;margin:26px 0 10px;padding-left:14px;border-left:2px solid #c8a96e;}
+#pmBody h2:first-child{margin-top:0;}
+#pmBody p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.85;margin-bottom:10px;}
+#pmBody ul{margin:8px 0 14px 0;list-style:none;}
+#pmBody ul li{font-size:13px;color:rgba(255,255,255,.62);padding:6px 0 6px 18px;position:relative;border-bottom:1px solid rgba(255,255,255,.04);line-height:1.6;}
+#pmBody ul li:last-child{border-bottom:none;}
+#pmBody ul li::before{content:'—';position:absolute;left:0;color:#c8a96e;font-size:11px;top:8px;}
+#pmBody strong{color:#fff;font-weight:600;}
+#pmBody .pm-contacts{padding:20px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);margin:18px 0 10px;border-radius:4px;}
+#pmBody .pm-contacts p{margin-bottom:6px;}
+#pmBody .pm-footer{margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:12px;color:rgba(255,255,255,.35);}
+#pmBody .pm-badge{background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.2);color:#c8a96e;padding:4px 14px;font-size:11px;font-weight:600;letter-spacing:.06em;}
+</style>
+<p><strong>Mukaab LLC</strong> (hereinafter — the Operator) places great importance on the protection of users' personal data. This Privacy Policy defines the procedure for processing and measures to ensure the security of information provided by visitors to the site <strong>mukaab.by</strong>.</p>
+<h2>1. General Provisions</h2>
+<p>This Privacy Policy is drawn up in accordance with the requirements of the legislation of the Republic of Belarus and defines the Operator's obligations regarding non-disclosure and ensuring the protection of personal data that the user provides when interacting with the site.</p>
+<p>The Operator respects the right to privacy and ensures the safety of information received from visitors.</p>
+<h2>2. Basic Concepts</h2>
+<ul>
+<li><strong>Personal data</strong> — any information relating directly or indirectly to a specific individual (full name, phone number, email, etc.).</li>
+<li><strong>Processing of personal data</strong> — any action (collection, recording, systematization, accumulation, storage, clarification, use, transfer, blocking, deletion, destruction).</li>
+<li><strong>User</strong> — a person who uses the site <strong>mukaab.by</strong> and voluntarily provides their personal data.</li>
+</ul>
+<h2>3. Personal Data We Collect</h2>
+<p>The Operator may process the following personal data of users:</p>
+<ul>
+<li>first and last name;</li>
+<li>phone number;</li>
+<li>email address;</li>
+<li>links to social networks (if specified);</li>
+<li>photos (if voluntarily provided by the user);</li>
+<li>other data provided voluntarily: <strong>messengers, position, company</strong>.</li>
+</ul>
+<p>In addition, technical data is automatically collected: IP address, browser information, cookies, information about actions on the site.</p>
+<h2>4. Purposes of Data Processing</h2>
+<ul>
+<li>processing requests and feedback;</li>
+<li>providing information about services and products;</li>
+<li>preparation of commercial offers;</li>
+<li>improving site performance, analyzing user experience;</li>
+<li>marketing and advertising communications (with user consent).</li>
+</ul>
+<h2>5. Legal Basis for Processing</h2>
+<ul>
+<li>user consent to the processing of personal data;</li>
+<li>conclusion and execution of an agreement to which the user is a party;</li>
+<li>requirements established by the legislation of the Republic of Belarus.</li>
+</ul>
+<h2>6. Conditions for Processing and Transfer of Data</h2>
+<p><strong>6.1.</strong> The Operator does not transfer personal data to third parties without the user's explicit consent, except in cases expressly provided for by law.</p>
+<p><strong>6.2.</strong> Personal data may be transferred to analytics services, CRM systems, as well as contractors: <strong>Yandex.Metrica, Google Analytics, CRM system, email services</strong>.</p>
+<p><strong>6.3.</strong> In case of cross-border transfer, the Operator ensures data protection in accordance with the legislation of the Republic of Belarus and international standards.</p>
+<h2>7. Data Retention Period</h2>
+<p>Personal data is stored <strong>no longer than 3 years from the moment of last interaction or until the user withdraws consent</strong>. After that, the data is subject to destruction or anonymization.</p>
+<h2>8. User Rights</h2>
+<ul>
+<li>receive information regarding the processing of their personal data;</li>
+<li>require clarification, blocking or destruction of their data;</li>
+<li>withdraw consent to the processing of personal data at any time;</li>
+<li>submit a request to restrict processing.</li>
+</ul>
+<p>To exercise their rights, the user can send a request to: <strong>privacy@mukaab.by</strong>.</p>
+<h2>9. Cookies and Analytics</h2>
+<p><strong>The site uses cookies for correct operation, analytics and personalization.</strong> The user can disable cookies in the browser settings. Disabling cookies may affect site functionality.</p>
+<p>Cookie files do not contain personal data and are used to collect anonymized statistics.</p>
+<h2>10. Protection of Personal Data</h2>
+<p>The Operator takes organizational and technical measures to protect personal data from unauthorized or accidental access, destruction, modification, copying, distribution.</p>
+<h2>11. Changes to the Privacy Policy</h2>
+<p>The Operator has the right to make changes to this Policy. The current version is always available on the website <strong>mukaab.by</strong>.</p>
+<div class="pm-contacts">
+<p><strong>12. Operator's Contact Details</strong></p>
+<p>Mukaab LLC</p>
+<p>Email: <strong>privacy@mukaab.by</strong></p>
+<p>Minsk, Melezh St. 1, office 405</p>
+</div>
+<div class="pm-footer">
+<span class="pm-badge">Current version</span>
+<span>© Mukaab LLC, all rights reserved</span>
+</div>`
+    }
+};
+
+/* ─── i18n ─── */
+const T = {
+    ru: {
+        nav1:'Главная', nav2:'Интерьеры', nav3:'Архитектура', nav4:'Услуги', nav5m:'Портфолио',
+        navCta:'Написать нам',
+        heroLabel: 'Услуги',
+        title: 'Дизайн интерьера',
+        subtitle: 'Концепции, рабочая документация и авторский надзор — создаём пространства, которые живут.',
+        sec1: 'Концепция и проектирование',
+        sec2: 'Стили и комплектация',
+        persqm: '/ м²',
+        perobj: '/ объект',
+        persec: '/ сек',
+        v1h: 'Концепт-дизайн',
+        v1a: 'Планировочное решение',
+        v1b: 'Стилевая концепция и мудборд',
+        v1c: 'Подбор цветовой палитры',
+        v1d: 'Зонирование пространства',
+        v2h: 'Дизайн-проект',
+        v2a: 'Полный комплект чертежей',
+        v2b: 'Развёртки стен с отделкой',
+        v2c: 'Спецификации материалов и мебели',
+        v2d: 'Подбор освещения и декора',
+        v3h: 'Комплексный дизайн-проект',
+        v3desc: 'Полный цикл от концепции до авторского надзора:',
+        v3a: 'Концепция и планировочные решения',
+        v3b: 'Полный комплект рабочих чертежей',
+        v3c: '3D-визуализация всех помещений',
+        v3d: 'Подбор и комплектация мебели',
+        v3e: 'Спецификации отделочных материалов',
+        v3f: 'Авторский надзор за строительством',
+        v3g: 'Подготовка к ремонту: сметы и графики',
+        v3h2: 'Итоговый фотоотчёт объекта',
+        v4h: 'Перепланировка пространства',
+        v4a: 'Анализ несущих конструкций',
+        v4b: 'Несколько планировочных вариантов',
+        v4c: 'Согласование с технадзором',
+        v4note: 'от 500$ за объект',
+        a1h: 'Подбор мебели и материалов',
+        a1a: 'Формирование листа покупок',
+        a1b: 'Переговоры с поставщиками',
+        a1c: 'Контроль поставки и качества',
+        a1d: 'Расстановка и стайлинг помещений',
+        a1note: 'от 800$ за объект',
+        a2h: 'Авторский надзор за реализацией',
+        a2price: 'По запросу',
+        a2a: 'Регулярные выезды на объект — еженедельно или по требованию',
+        a2b: 'Проверка соответствия отделки проектной документации',
+        a2c: 'Оперативное решение спорных вопросов с подрядчиком',
+        a2d: 'Стоимость рассчитывается индивидуально по объёму объекта',
+        ctah: 'Обсудим ваш интерьер?',
+        ctap: 'Оставьте заявку — свяжемся в течение часа',
+        ctabtn: 'Оставить заявку',
+        footsub: 'Premium Architecture Studio'
+    },
+    en: {
+        nav1:'Home', nav2:'Interiors', nav3:'Architecture', nav4:'Services', nav5m:'Portfolio',
+        navCta:'Contact Us',
+        heroLabel: 'Services',
+        title: 'Interior Design',
+        subtitle: 'Concepts, working documentation and author supervision — we create spaces that truly live.',
+        sec1: 'Concept & Design',
+        sec2: 'Styles & Procurement',
+        persqm: '/ m²',
+        perobj: '/ object',
+        persec: '/ sec',
+        v1h: 'Concept Design',
+        v1a: 'Layout planning',
+        v1b: 'Style concept and moodboard',
+        v1c: 'Colour palette selection',
+        v1d: 'Space zoning',
+        v2h: 'Design Project',
+        v2a: 'Full set of drawings',
+        v2b: 'Wall elevations with finishes',
+        v2c: 'Material and furniture specifications',
+        v2d: 'Lighting and decor selection',
+        v3h: 'Full Design Project',
+        v3desc: 'Complete cycle from concept to author supervision:',
+        v3a: 'Concept and layout solutions',
+        v3b: 'Full set of working drawings',
+        v3c: '3D visualisation of all rooms',
+        v3d: 'Furniture selection and procurement',
+        v3e: 'Finishing material specifications',
+        v3f: 'Author supervision during construction',
+        v3g: 'Pre-renovation: estimates and schedules',
+        v3h2: 'Final photo report of the object',
+        v4h: 'Space Replanning',
+        v4a: 'Structural analysis',
+        v4b: 'Multiple layout options',
+        v4c: 'Technical inspection coordination',
+        v4note: 'from $500 per object',
+        a1h: 'Furniture & Materials Sourcing',
+        a1a: 'Shopping list preparation',
+        a1b: 'Supplier negotiations',
+        a1c: 'Delivery and quality control',
+        a1d: 'Room arrangement and styling',
+        a1note: 'from $800 per object',
+        a2h: 'Author Supervision',
+        a2price: 'On request',
+        a2a: 'Regular site visits — weekly or on demand',
+        a2b: 'Verification of finishes against project documentation',
+        a2c: 'Prompt resolution of disputes with contractors',
+        a2d: 'Price calculated individually based on project scope',
+        ctah: 'Shall we discuss your interior?',
+        ctap: "Leave a request — we'll respond within the hour",
+        ctabtn: 'Send a request',
+        footsub: 'Premium Architecture Studio'
+    }
+};
+
+let lang = 'ru';
+
+function toggleContacts(){
+    document.getElementById("contactMenu").classList.toggle("active");
+}
+
+document.addEventListener("click",(e)=>{
+    const dropdown = document.querySelector(".contact-dropdown");
+    const menu = document.getElementById("contactMenu");
+    if(!dropdown.contains(e.target)){
+        menu.classList.remove("active");
+    }
+});
+
+function openPrivacy() {
+    const overlay = document.getElementById('privacyOverlay');
+    const modal   = document.getElementById('privacyModal');
+    document.getElementById('pmBody').innerHTML = PM[lang].body;
+    overlay.style.opacity = '1';
+    overlay.style.visibility = 'visible';
+    modal.style.transform = 'translateY(0) scale(1)';
+    document.body.style.overflow = 'hidden';
+}
+
+function closePrivacy() {
+    const overlay = document.getElementById('privacyOverlay');
+    const modal   = document.getElementById('privacyModal');
+    overlay.style.opacity = '0';
+    overlay.style.visibility = 'hidden';
+    modal.style.transform = 'translateY(24px) scale(.97)';
+    document.body.style.overflow = '';
+}
+
+document.getElementById('privacyOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closePrivacy();
+});
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePrivacy(); });
+
+function toggleMenu() {
+    const menu   = document.getElementById('mobileMenu');
+    const burger = document.getElementById('burger');
+    const open   = menu.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+}
+
+document.querySelectorAll('.mobile-menu a').forEach(a => {
+    a.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.remove('open');
+        document.getElementById('burger').classList.remove('open');
+        document.body.style.overflow = '';
+    });
+});
+
+function setLang(l) {
+    lang = l;
+    document.getElementById('btn-ru').classList.toggle('active', l === 'ru');
+    document.getElementById('btn-en').classList.toggle('active', l === 'en');
+    document.getElementById('mob-btn-ru').classList.toggle('active', l === 'ru');
+    document.getElementById('mob-btn-en').classList.toggle('active', l === 'en');
+
+    const merged = Object.assign({}, T[l], PM[l]);
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const k = el.getAttribute('data-i18n');
+        if (merged[k] !== undefined) el.innerHTML = merged[k];
+    });
+
+    const overlay = document.getElementById('privacyOverlay');
+    if (overlay && overlay.style.visibility === 'visible') {
+        document.getElementById('pmBody').innerHTML = PM[l].body;
+    }
+
+    localStorage.setItem('lang', l);
+}
+
+function toggleMobileContacts(){
+    document.getElementById("mobileContactMenu").classList.toggle("active");
+}
+
+window.addEventListener('scroll', () => {
+    const nb = document.getElementById('navbar');
+    if (window.scrollY > 40) {
+        nb.classList.add('scrolled');
+    } else {
+        nb.classList.remove('scrolled');
+    }
+});
+
+const saved = localStorage.getItem('lang');
+if (saved) setLang(saved);
+</script>
+</body>
+</html>

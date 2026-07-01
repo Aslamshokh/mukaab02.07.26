@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUKAAB — Вакансии</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+    --gold: #ffffff;
+    --blue: rgba(0,81,255,0.40);
+    --blue-h: #2601faaf;
+    --border: rgba(255,255,255,0.07);
+    --muted: rgba(255,255,255,0.55);
+}
+
+body { background:#050505; color:#fff; font-family:'Montserrat',sans-serif; overflow-x:hidden; }
+img  { width:100%; display:block; }
+a    { text-decoration:none; color:inherit; }
+
+/* ─── NAVBAR ─── */
+.navbar {
+    position:fixed; top:0; left:0;
+    width:100%; height:90px; padding:0 50px;
+    display:flex; align-items:center; justify-content:space-between;
+    z-index:99999;
+    background:rgba(0,0,0,0.185);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(22,15,15,0.103);
+}
+.nav-left { display:flex; gap:24px; }
+.nav-left a { color:#fff; font-size:14px; font-weight:500; opacity:.7; transition:.3s; }
+.nav-left a:hover { opacity:1; }
+.logo { position:absolute; left:50%; transform:translateX(-50%); }
+.logo img { width:140px; height:auto; object-fit:contain; }
+.nav-right { display:flex; align-items:center; gap:18px; flex-shrink:0; margin-right:6px; }
+.nav-right a { color:#fff; font-size:14px; opacity:.7; }
+.lang-switch { display:flex; gap:10px; }
+.lang-switch button {
+    width:42px; height:42px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.05);
+    color:#fff; cursor:pointer; transition:.3s;
+    font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700;
+}
+.lang-switch button.active { background:#1d4ed8; }
+.contact-dropdown { position:relative; }
+.nav-cta {
+    height:52px; padding:0 24px; border:none; border-radius:999px;
+    background:linear-gradient(135deg,rgba(0,81,255,.95),rgba(37,99,235,.95));
+    color:#fff; font-size:14px; font-weight:700; font-family:'Montserrat',sans-serif;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:.35s; white-space:nowrap;
+    box-shadow:0 12px 35px rgba(37,99,235,.30);
+}
+.nav-cta:hover { transform:translateY(-2px); box-shadow:0 18px 45px rgba(37,99,235,.45); background:linear-gradient(135deg,#2563eb,#3b82f6); }
+.contact-menu {
+    position:absolute; top:65px; right:0; width:220px; padding:12px; border-radius:22px;
+    background:rgba(10,10,10,0.92); backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.08);
+    display:flex; flex-direction:column; gap:8px;
+    opacity:0; visibility:hidden; transform:translateY(10px); transition:.35s; z-index:999;
+}
+.contact-menu.active { opacity:1; visibility:visible; transform:translateY(0); }
+.contact-menu a {
+    height:50px; border-radius:14px; display:flex; align-items:center; padding:0 18px;
+    background:rgba(255,255,255,.03); font-size:14px; font-weight:600; transition:.3s;
+}
+.contact-menu a:hover { background:rgba(0,81,255,.22); transform:translateX(4px); }
+
+/* ─── BURGER ─── */
+.burger {
+    display:none; flex-direction:column; justify-content:center; align-items:center;
+    gap:5px; width:42px; height:42px; border-radius:50%;
+    border:1px solid transparent; background:transparent;
+    cursor:pointer; z-index:1001; transition:background .3s; flex-shrink:0;
+}
+.burger:hover { background:rgba(255,255,255,.10); }
+.burger span { display:block; width:18px; height:1.5px; background:#fff; border-radius:2px; transition:transform .35s, opacity .35s; transform-origin:center; }
+.burger.open span:nth-child(1) { transform:translateY(6.5px) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
+.burger.open span:nth-child(3) { transform:translateY(-6.5px) rotate(-45deg); }
+
+/* ─── MOBILE MENU ─── */
+.mobile-menu {
+    position:fixed; top:90px; left:0; width:100%;
+    background:rgba(5,5,5,.98); backdrop-filter:blur(24px);
+    border-bottom:1px solid rgba(255,255,255,.07);
+    padding:28px 24px 32px; display:flex; flex-direction:column; gap:0;
+    transform:translateY(-110%); opacity:0;
+    transition:transform .4s cubic-bezier(.19,1,.22,1), opacity .35s;
+    z-index:998; pointer-events:none;
+}
+.mobile-menu.open { transform:translateY(0); opacity:1; pointer-events:all; }
+.mobile-menu a { display:block; color:rgba(255,255,255,.72); font-size:15px; font-weight:500; padding:14px 0; transition:color .25s; }
+.mobile-menu a:hover { color:#fff; }
+.mobile-menu-lang { display:flex; gap:10px; margin-top:22px; padding-top:22px; border-top:1px solid rgba(255,255,255,.07); }
+.mobile-menu-lang button { width:46px; height:46px; border-radius:50%; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.05); color:#fff; font-size:13px; font-weight:700; font-family:'Montserrat',sans-serif; cursor:pointer; transition:.3s; }
+.mobile-menu-lang button:hover, .mobile-menu-lang button.active { background:rgba(0,81,255,.42); border-color:rgba(0,81,255,.5); }
+.mobile-contact-dropdown { position:relative; margin-top:18px; }
+.mobile-menu-cta { width:100%; height:54px; margin-top:0; border:none; border-radius:18px; background:linear-gradient(135deg,rgba(0,81,255,.95),rgba(37,99,235,.95)); color:#fff; font-size:15px; font-weight:700; font-family:'Montserrat',sans-serif; cursor:pointer; transition:.35s; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 30px rgba(37,99,235,.28); }
+.mobile-contact-menu { display:flex; flex-direction:column; gap:8px; margin-top:12px; opacity:0; visibility:hidden; max-height:0; overflow:hidden; transition:.35s ease; }
+.mobile-contact-menu.active { opacity:1; visibility:visible; max-height:300px; }
+.mobile-contact-menu a { height:52px; border-radius:16px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600; transition:.3s; }
+.mobile-contact-menu a:hover { background:rgba(0,81,255,.18); border-color:rgba(0,81,255,.28); }
+
+/* ─── HERO ─── */
+.hero { position:relative; height:62vh; min-height:380px; overflow:hidden; margin-top:90px; }
+.hero-image { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(.65); transition:transform 8s ease; }
+.hero:hover .hero-image { transform:scale(1.04); }
+.hero-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,.97) 0%,rgba(0,0,0,.30) 55%,transparent 100%); }
+.hero-content { position:absolute; bottom:52px; left:60px; z-index:2; }
+.hero-label { display:block; font-size:11px; letter-spacing:.38em; text-transform:uppercase; color:var(--gold); font-weight:700; margin-bottom:14px; }
+.hero-content h1 { font-size:clamp(40px,6.5vw,80px); font-weight:800; letter-spacing:-.03em; line-height:1.05; margin-bottom:16px; }
+.hero-content p { font-size:15px; color:rgba(255,255,255,.60); max-width:500px; line-height:1.7; }
+
+/* ─── PANEL ─── */
+.services-panel {
+    max-width:1320px; margin:0 auto;
+    padding:72px 40px 100px;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+}
+
+.panel-section-label {
+    grid-column:1/-1; display:flex; align-items:center; gap:20px; margin-top:14px; margin-bottom:4px;
+}
+.panel-section-label span { font-size:10px; letter-spacing:.32em; text-transform:uppercase; color:var(--gold); font-weight:700; white-space:nowrap; }
+.panel-section-label::after { content:''; flex:1; height:1px; background:rgba(255,255,255,.07); }
+
+/* ─── VACANCY CARD ─── */
+.service-box {
+    padding:30px 28px; border:1px solid rgba(255,255,255,.07);
+    background:rgba(255,255,255,.025); backdrop-filter:blur(14px);
+    transition:border-color .4s, background .4s;
+    display:flex; flex-direction:column; gap:16px;
+}
+.service-box:hover { border-color:rgba(0,81,255,.30); background:rgba(0,81,255,.04); }
+.service-box.featured { border-color:rgba(53, 52, 52, 0.28); background:rgba(200,169,110,.03); }
+.service-box.featured:hover { border-color:rgba(65, 59, 49, 0.55); background:rgba(200,169,110,.07); }
+.service-box.wide  { grid-column:span 2; }
+.service-box.full  { grid-column:1/-1; }
+
+.service-top { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+.service-top h2 { font-size:18px; font-weight:700; line-height:1.25; letter-spacing:-.01em; }
+
+/* badge (тип занятости) */
+.vac-badge {
+    display:inline-flex; align-items:center;
+    padding:5px 14px; border-radius:50px;
+    font-size:11px; font-weight:700; letter-spacing:.06em; white-space:nowrap; flex-shrink:0;
+    border:1px solid rgba(0,81,255,.35); background:rgba(0,81,255,.12); color:rgba(200,220,255,.9);
+}
+.vac-badge.gold { border-color:rgba(53, 52, 51, 0.178); background:rgba(167, 141, 95, 0.1); color:#fffdfa; }
+.vac-badge.green { border-color:rgba(50,200,100,.28); background:rgba(50,200,100,.08); color:rgba(130,230,160,.9); }
+
+/* список требований / обязанностей */
+.service-box ul { list-style:none; display:flex; flex-direction:column; gap:0; }
+.service-box ul li { font-size:13px; color:rgba(255,255,255,.62); padding:8px 0 8px 18px; position:relative; border-bottom:1px solid rgba(255,255,255,.04); line-height:1.5; }
+.service-box ul li:last-child { border-bottom:none; }
+.service-box ul li::before { content:'—'; position:absolute; left:0; color:var(--gold); font-size:11px; top:10px; }
+
+/* row (зарплата / условие) */
+.service-text .row { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.04); font-size:13px; color:rgba(255,255,255,.65); }
+.service-text .row:last-child { border-bottom:none; }
+.service-text .row .row-val { font-weight:700; color:#fff; font-size:14px; white-space:nowrap; }
+
+.service-description p { font-size:13px; color:var(--muted); line-height:1.75; }
+
+/* premium note */
+.premium-note { display:inline-block; padding:8px 16px; background:rgba(200,169,110,.10); border:1px solid rgba(200,169,110,.22); color:var(--gold); font-size:12px; font-weight:600; letter-spacing:.04em; margin-top:4px; align-self:flex-start; }
+
+/* two-col list */
+.two-col-list { display:grid; grid-template-columns:1fr 1fr; gap:0; }
+
+/* apply button inside card */
+.vac-apply {
+    align-self:flex-start; margin-top:4px;
+    height:42px; padding:0 24px; border-radius:50px;
+    background:var(--blue); border:1px solid rgba(255,255,255,.15);
+    color:#fff; font-size:13px; font-family:'Montserrat',sans-serif; font-weight:700;
+    cursor:pointer; transition:.35s; letter-spacing:.04em;
+}
+.vac-apply:hover { background:var(--blue-h); transform:translateY(-1px); }
+
+/* ─── CTA ROW ─── */
+.cta-row {
+    grid-column:1/-1; display:flex; align-items:center; justify-content:space-between;
+    gap:24px; padding:40px 44px;
+    border:1px solid rgba(255,255,255,.07); background:rgba(255,255,255,.02);
+    flex-wrap:wrap; margin-top:8px;
+}
+.cta-row h3 { font-size:clamp(20px,2.8vw,30px); font-weight:800; letter-spacing:-.02em; margin-bottom:8px; }
+.cta-row p { font-size:14px; color:var(--muted); }
+.cta-btn { height:52px; padding:0 34px; border-radius:50px; background:var(--blue); border:1px solid rgba(255,255,255,.20); color:#fff; font-size:15px; font-family:'Montserrat',sans-serif; font-weight:700; cursor:pointer; transition:.4s; white-space:nowrap; letter-spacing:.04em; }
+.cta-btn:hover { background:var(--blue-h); }
+
+/* ─── FOOTER ─── */
+.footer { padding:36px 40px; border-top:1px solid rgba(255,255,255,.07); display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--muted); flex-wrap:wrap; gap:12px; }
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1020px){
+    .services-panel { grid-template-columns:1fr 1fr; padding:50px 24px 80px; }
+    .service-box.wide { grid-column:span 2; }
+}
+@media(max-width:1200px){
+    .navbar { display:flex; justify-content:space-between; padding:0 20px; }
+    .nav-left, .nav-right { display:none; }
+    .burger { display:flex; }
+    .logo { margin:0 auto; position:static; transform:none; }
+}
+@media(max-width:680px){
+    .services-panel { grid-template-columns:1fr; padding:40px 16px 70px; }
+    .service-box.wide { grid-column:span 1; }
+    .two-col-list { grid-template-columns:1fr; }
+    .hero-content { left:24px; bottom:36px; }
+    .cta-row { padding:28px 24px; flex-direction:column; align-items:flex-start; }
+    .footer { flex-direction:column; align-items:flex-start; padding:28px 20px; }
+    .panel-section-label { grid-column:1; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<header class="navbar" id="navbar">
+    <div class="nav-left">
+        <a href="mukaab.html" data-i18n="nav1">Главная</a>
+        <a href="interior-design1.html" data-i18n="nav2">Интерьеры</a>
+        <a href="Architecture service2.html" data-i18n="nav3">Архитектура</a>
+    </div>
+    <a class="logo" href="mukaab.html">
+        <img src="images/LOGO-2.png" alt="">
+    </a>
+    <div class="nav-right">
+        <a href="services.html" data-i18n="nav4">Услуги</a>
+        <a href="portfolio.html" data-i18n="nav5m">Портфолио</a>
+        <div class="lang-switch">
+            <button onclick="setLang('ru')" id="btn-ru" class="active">RU</button>
+            <button onclick="setLang('en')" id="btn-en">EN</button>
+        </div>
+        <div class="contact-dropdown">
+            <button class="nav-cta" onclick="toggleContacts()" data-i18n="navCta">Написать</button>
+            <div class="contact-menu" id="contactMenu">
+                <a href="https://t.me/mukaab_company" target="_blank">Telegram</a>
+                <a href="https://wa.me/375339161111" target="_blank">WhatsApp</a>
+                <a href="mailto:mukaabcompany@gmail.com">Написать нам</a>
+            </div>
+        </div>
+    </div>
+    <button class="burger" id="burger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+</header>
+
+<!-- ── MOBILE MENU ── -->
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="mukaab.html" data-i18n="nav1">Главная</a>
+    <a href="interior-design1.html" data-i18n="nav2">Интерьеры</a>
+    <a href="Architecture service2.html" data-i18n="nav3">Архитектура</a>
+    <a href="services.html" data-i18n="nav4">Услуги</a>
+    <a href="portfolio.png" data-i18n="nav5m">О нас</a>
+    <div class="mobile-menu-lang">
+        <button onclick="setLang('ru')" id="mob-btn-ru" class="active">RU</button>
+        <button onclick="setLang('en')" id="mob-btn-en">EN</button>
+    </div>
+    <div class="mobile-contact-dropdown">
+        <button class="mobile-menu-cta" onclick="toggleMobileContacts()" data-i18n="navCta">Написать нам</button>
+        <div class="mobile-contact-menu" id="mobileContactMenu">
+            <a href="https://t.me/mukaab_company" target="_blank">Telegram</a>
+            <a href="https://wa.me/375339161111" target="_blank">WhatsApp</a>
+            <a href="mailto:mukaabcompany@gmail.com">Написать нам</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+    <img src="images/vacancies.png" class="hero-image" alt="">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <span class="hero-label" data-i18n="heroLabel">Команда</span>
+        <h1 data-i18n="title">Вакансии</h1>
+        <p data-i18n="subtitle">Ищем талантливых людей, которые разделяют нашу страсть к архитектуре и деталям.</p>
+    </div>
+</section>
+
+<!-- ── PANEL ── -->
+<section class="services-panel">
+
+    <!-- ═══ ПРОЕКТИРОВАНИЕ ═══ -->
+    <div class="panel-section-label">
+        <span data-i18n="sec1">Проектирование и дизайн</span>
+    </div>
+
+    <!-- Архитектор -->
+    <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="j1h">Архитектор-проектировщик</h2>
+            <span class="vac-badge gold" data-i18n="j1type">Полная занятость</span>
+        </div>
+        <div class="service-text">
+            <div class="row"><span data-i18n="j1s1">Опыт работы</span><span class="row-val" data-i18n="j1v1">от 3 лет</span></div>
+            <div class="row"><span data-i18n="j1s2">Зарплата</span><span class="row-val" data-i18n="j1v2">от 2 000 $</span></div>
+            <div class="row"><span data-i18n="j1s3">График</span><span class="row-val" data-i18n="j1v3">5/2, офис</span></div>
+        </div>
+        <ul>
+            <li data-i18n="j1a">Разработка архитектурных концепций</li>
+            <li data-i18n="j1b">Ведение проектов от ТЗ до стройки</li>
+            <li data-i18n="j1c">Знание ArchiCAD / Revit</li>
+        </ul>
+        <button class="vac-apply" data-i18n="applyBtn" onclick="openApply('Архитектор-проектировщик')">Откликнуться</button>
+    </div>
+
+    <!-- Дизайнер интерьера -->
+    <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="j2h">Дизайнер интерьера</h2>
+            <span class="vac-badge gold" data-i18n="j2type">Полная занятость</span>
+        </div>
+        <div class="service-text">
+            <div class="row"><span data-i18n="j2s1">Опыт работы</span><span class="row-val" data-i18n="j2v1">от 2 лет</span></div>
+            <div class="row"><span data-i18n="j2s2">Зарплата</span><span class="row-val" data-i18n="j2v2">от 1 500 $</span></div>
+            <div class="row"><span data-i18n="j2s3">График</span><span class="row-val" data-i18n="j2v3">5/2, офис</span></div>
+        </div>
+        <ul>
+            <li data-i18n="j2a">Создание дизайн-концепций и мудбордов</li>
+            <li data-i18n="j2b">Разработка рабочей документации</li>
+            <li data-i18n="j2c">Знание AutoCAD, 3ds Max / SketchUp</li>
+        </ul>
+        <button class="vac-apply" data-i18n="applyBtn" onclick="openApply('Дизайнер интерьера')">Откликнуться</button>
+    </div>
+
+    <!-- 3D-визуализатор — featured wide -->
+    <div class="service-box wide featured">
+        <div class="service-top">
+            <h2 data-i18n="j3h">3D-визуализатор / архитектурный рендер</h2>
+            <span class="vac-badge gold" data-i18n="j3type">Полная занятость</span>
+        </div>
+        <div class="service-description">
+            <p data-i18n="j3desc">Ключевая роль в команде: ты превращаешь проекты в фотореалистичные образы.</p>
+        </div>
+        <ul class="two-col-list">
+            <li data-i18n="j3a">Фотореалистичная визуализация интерьеров и экстерьеров</li>
+            <li data-i18n="j3b">Работа в 3ds Max + Corona / V-Ray</li>
+            <li data-i18n="j3c">Подбор и настройка реальных материалов</li>
+            <li data-i18n="j3d">Постобработка в Photoshop / Lightroom</li>
+            <li data-i18n="j3e">Опыт от 2 лет, портфолио обязательно</li>
+            <li data-i18n="j3f">Зарплата от 1 800 $ — обсуждается</li>
+        </ul>
+        <button class="vac-apply" data-i18n="applyBtn" onclick="openApply('3D-визуализатор')">Откликнуться</button>
+    </div>
+
+    <!-- ═══ ПРОИЗВОДСТВО И НАДЗОР ═══ -->
+    <div class="panel-section-label">
+        <span data-i18n="sec2">Производство и надзор</span>
+    </div>
+
+    <!-- Авторский надзор -->
+    <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="j4h">Инженер авторского надзора</h2>
+            <span class="vac-badge" data-i18n="j4type">Полная занятость</span>
+        </div>
+        <div class="service-text">
+            <div class="row"><span data-i18n="j4s1">Опыт работы</span><span class="row-val" data-i18n="j4v1">от 4 лет</span></div>
+            <div class="row"><span data-i18n="j4s2">Зарплата</span><span class="row-val" data-i18n="j4v2">от 1 800 $</span></div>
+            <div class="row"><span data-i18n="j4s3">График</span><span class="row-val" data-i18n="j4v3">Разъездной</span></div>
+        </div>
+        <ul>
+            <li data-i18n="j4a">Контроль строительства по проекту</li>
+            <li data-i18n="j4b">Взаимодействие с подрядчиками</li>
+            <li data-i18n="j4c">Ведение технической документации</li>
+        </ul>
+        <button class="vac-apply" data-i18n="applyBtn" onclick="openApply('Инженер авторского надзора')">Откликнуться</button>
+    </div>
+
+    <!-- Менеджер проектов — wide -->
+    <div class="service-box wide">
+        <div class="service-top">
+            <h2 data-i18n="j5h">Менеджер проектов</h2>
+            <span class="vac-badge green" data-i18n="j5type">Гибрид</span>
+        </div>
+        <div class="service-text">
+            <div class="row"><span data-i18n="j5s1">Опыт работы</span><span class="row-val" data-i18n="j5v1">от 2 лет в строительстве / дизайне</span></div>
+            <div class="row"><span data-i18n="j5s2">Зарплата</span><span class="row-val" data-i18n="j5v2">от 1 200 $ + бонусы</span></div>
+            <div class="row"><span data-i18n="j5s3">Формат</span><span class="row-val" data-i18n="j5v3">офис + выезды на объекты</span></div>
+            <div class="row"><span data-i18n="j5s4">Задачи</span><span class="row-val" data-i18n="j5v4">Координация команды и клиентов</span></div>
+        </div>
+    </div>
+
+    <!-- ═══ СТАЖИРОВКА ═══ -->
+    <div class="panel-section-label">
+        <span data-i18n="sec3">Стажировка</span>
+    </div>
+
+    <!-- Стажёр-дизайнер -->
+    <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="j6h">Стажёр-дизайнер</h2>
+            <span class="vac-badge green" data-i18n="j6type">Стажировка</span>
+        </div>
+        <div class="service-text">
+            <div class="row"><span data-i18n="j6s1">Опыт</span><span class="row-val" data-i18n="j6v1">Не требуется</span></div>
+            <div class="row"><span data-i18n="j6s2">Оплата</span><span class="row-val" data-i18n="j6v2">Оговаривается</span></div>
+            <div class="row"><span data-i18n="j6s3">Длительность</span><span class="row-val" data-i18n="j6v3">3 месяца</span></div>
+        </div>
+        <ul>
+            <li data-i18n="j6a">Помощь в разработке концепций</li>
+            <li data-i18n="j6b">Работа с реальными проектами</li>
+        </ul>
+        <div class="premium-note" data-i18n="j6note">Возможен перевод в штат</div>
+        <button class="vac-apply" data-i18n="applyBtn" onclick="openApply('Стажёр-дизайнер')">Откликнуться</button>
+    </div>
+
+    <!-- Стажёр-визуализатор -->
+    <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="j7h">Стажёр-визуализатор</h2>
+            <span class="vac-badge green" data-i18n="j7type">Стажировка</span>
+        </div>
+        <div class="service-text">
+            <div class="row"><span data-i18n="j7s1">Опыт</span><span class="row-val" data-i18n="j7v1">Базовые знания 3ds Max</span></div>
+            <div class="row"><span data-i18n="j7s2">Оплата</span><span class="row-val" data-i18n="j7v2">Оговаривается</span></div>
+            <div class="row"><span data-i18n="j7s3">Длительность</span><span class="row-val" data-i18n="j7v3">3 месяца</span></div>
+        </div>
+        <ul>
+            <li data-i18n="j7a">Помощь в рендеринге сцен</li>
+            <li data-i18n="j7b">Настройка материалов и освещения</li>
+        </ul>
+        <div class="premium-note" data-i18n="j7note">Возможен перевод в штат</div>
+        <button class="vac-apply" data-i18n="applyBtn" onclick="openApply('Стажёр-визуализатор')">Откликнуться</button>
+    </div>
+
+    <!-- Нет подходящей вакансии -->
+    <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="j8h">Не нашли подходящую?</h2>
+        </div>
+        <div class="service-description">
+            <p data-i18n="j8desc">Отправьте резюме и портфолио — мы всегда открыты для талантливых людей. Рассмотрим возможности для вас лично.</p>
+        </div>
+        <button class="vac-apply" data-i18n="j8btn" onclick="openApply('Открытое резюме')">Отправить резюме</button>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-row">
+        <div>
+            <h3 data-i18n="ctah">Готовы стать частью команды?</h3>
+            <p data-i18n="ctap">Пишите — ответим в течение 24 часов</p>
+        </div>
+        <button class="cta-btn" data-i18n="ctabtn" onclick="openApply('Общий отклик')">Написать нам</button>
+    </div>
+
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+    <div>© 2026 MUKAAB</div>
+    <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+        <button onclick="openPrivacy()" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer;font-family:'Montserrat',sans-serif;transition:.3s;padding:0;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.4)'" data-i18n="privacyLink">Политика конфиденциальности</button>
+    </div>
+</footer>
+
+<!-- ── APPLY MODAL ── -->
+<div id="applyOverlay" style="
+    position:fixed;inset:0;z-index:9999;
+    background:rgba(0,0,0,0.60);backdrop-filter:blur(18px);
+    display:flex;justify-content:center;align-items:center;
+    opacity:0;visibility:hidden;transition:.35s ease;
+">
+<div id="applyModal" style="
+    width:min(540px,94vw);
+    background:rgba(10,10,10,0.97);
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:6px;
+    padding:40px 40px 36px;
+    position:relative;
+    transform:translateY(24px) scale(.97);
+    transition:.35s cubic-bezier(.19,1,.22,1);
+">
+    <div id="applyLabel" style="font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:#c8a96e;font-weight:700;margin-bottom:12px;">Вакансия</div>
+    <div id="applyTitle" style="font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:28px;">—</div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;">
+        <input id="aName" type="text" placeholder="Имя и фамилия" style="height:50px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:4px;padding:0 18px;color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;outline:none;transition:border-color .3s;" onfocus="this.style.borderColor='rgba(0,81,255,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.09)'">
+        <input id="aContact" type="text" placeholder="Telegram / телефон / email" style="height:50px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:4px;padding:0 18px;color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;outline:none;transition:border-color .3s;" onfocus="this.style.borderColor='rgba(0,81,255,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.09)'">
+        <input id="aPortfolio" type="text" placeholder="Ссылка на портфолио (необязательно)" style="height:50px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:4px;padding:0 18px;color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;outline:none;transition:border-color .3s;" onfocus="this.style.borderColor='rgba(0,81,255,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.09)'">
+        <textarea id="aMessage" placeholder="Коротко о себе..." rows="3" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:4px;padding:14px 18px;color:#fff;font-family:'Montserrat',sans-serif;font-size:14px;outline:none;resize:none;transition:border-color .3s;line-height:1.6;" onfocus="this.style.borderColor='rgba(0,81,255,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.09)'"></textarea>
+    </div>
+
+    <div id="applyError" style="display:none;margin-top:10px;font-size:12px;color:rgba(255,100,100,.8);">Заполните имя и контакт</div>
+    <div id="applySuccess" style="display:none;margin-top:10px;font-size:13px;color:rgba(130,230,160,.85);">✓ Отклик отправлен! Мы свяжемся с вами в ближайшее время.</div>
+
+    <button onclick="submitApply()" style="
+        width:100%;height:52px;margin-top:22px;border:none;border-radius:4px;
+        background:linear-gradient(135deg,rgba(0,81,255,.95),rgba(37,99,235,.95));
+        color:#fff;font-size:15px;font-weight:700;font-family:'Montserrat',sans-serif;
+        cursor:pointer;transition:.35s;box-shadow:0 10px 30px rgba(37,99,235,.28);
+        letter-spacing:.04em;
+    " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">Отправить отклик</button>
+
+    <button onclick="closeApply()" style="
+        position:absolute;top:20px;right:20px;
+        width:40px;height:40px;border-radius:50%;
+        border:1px solid rgba(255,255,255,.09);
+        background:rgba(255,255,255,.04);
+        color:rgba(255,255,255,.6);font-size:18px;
+        cursor:pointer;display:flex;align-items:center;justify-content:center;
+        transition:.25s;font-family:'Montserrat',sans-serif;
+    " onmouseover="this.style.transform='rotate(90deg)';this.style.background='rgba(255,255,255,.1)';this.style.color='#fff'"
+       onmouseout="this.style.transform='rotate(0deg)';this.style.background='rgba(255,255,255,.04)';this.style.color='rgba(255,255,255,.6)'">✕</button>
+</div>
+</div>
+
+<!-- ── PRIVACY MODAL ── -->
+<div id="privacyOverlay" style="
+    position:fixed;inset:0;z-index:9998;
+    background:rgba(0,0,0,0.55);backdrop-filter:blur(16px);
+    display:flex;justify-content:center;align-items:center;
+    opacity:0;visibility:hidden;transition:.35s ease;
+">
+<div id="privacyModal" style="
+    width:min(860px,94vw);height:min(780px,90vh);
+    background:rgba(10,10,10,0.97);
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:6px;
+    display:flex;flex-direction:column;
+    position:relative;
+    transform:translateY(24px) scale(.97);
+    transition:.35s cubic-bezier(.19,1,.22,1);
+    overflow:hidden;
+">
+    <div style="padding:28px 36px 20px;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;">
+        <div style="font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:#c8a96e;font-weight:700;margin-bottom:10px;" data-i18n="pmLabel">Документ</div>
+        <div style="font-size:22px;font-weight:800;letter-spacing:-.02em;" data-i18n="pmTitle">Политика конфиденциальности</div>
+    </div>
+    <div id="pmBody" style="flex:1;overflow-y:auto;padding:28px 36px 36px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.12) transparent;"></div>
+    <button onclick="closePrivacy()" style="position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.25s;font-family:'Montserrat',sans-serif;"
+    onmouseover="this.style.transform='rotate(90deg)';this.style.background='rgba(255,255,255,.1)';this.style.color='#fff'"
+    onmouseout="this.style.transform='rotate(0deg)';this.style.background='rgba(255,255,255,.04)';this.style.color='rgba(255,255,255,.6)'">✕</button>
+</div>
+</div>
+
+<script>
+/* ─── i18n ─── */
+const T = {
+    ru: {
+        nav1:'Главная', nav2:'Интерьеры', nav3:'Архитектура', nav4:'Услуги', nav5m:'Портфолио',
+        navCta:'Написать нам',
+        heroLabel:'Команда', title:'Вакансии',
+        subtitle:'Ищем талантливых людей, которые разделяют нашу страсть к архитектуре и деталям.',
+        sec1:'Проектирование и дизайн', sec2:'Производство и надзор', sec3:'Стажировка',
+        applyBtn:'Откликнуться',
+        j1h:'Архитектор-проектировщик', j1type:'Полная занятость',
+        j1s1:'Опыт работы', j1v1:'от 3 лет', j1s2:'Зарплата', j1v2:'от 2 000 $', j1s3:'График', j1v3:'5/2, офис',
+        j1a:'Разработка архитектурных концепций', j1b:'Ведение проектов от ТЗ до стройки', j1c:'Знание ArchiCAD / Revit',
+        j2h:'Дизайнер интерьера', j2type:'Полная занятость',
+        j2s1:'Опыт работы', j2v1:'от 2 лет', j2s2:'Зарплата', j2v2:'от 1 500 $', j2s3:'График', j2v3:'5/2, офис',
+        j2a:'Создание дизайн-концепций и мудбордов', j2b:'Разработка рабочей документации', j2c:'Знание AutoCAD, 3ds Max / SketchUp',
+        j3h:'3D-визуализатор / архитектурный рендер', j3type:'Полная занятость',
+        j3desc:'Ключевая роль в команде: ты превращаешь проекты в фотореалистичные образы.',
+        j3a:'Фотореалистичная визуализация интерьеров и экстерьеров', j3b:'Работа в 3ds Max + Corona / V-Ray',
+        j3c:'Подбор и настройка реальных материалов', j3d:'Постобработка в Photoshop / Lightroom',
+        j3e:'Опыт от 2 лет, портфолио обязательно', j3f:'Зарплата от 1 800 $ — обсуждается',
+        j4h:'Инженер авторского надзора', j4type:'Полная занятость',
+        j4s1:'Опыт работы', j4v1:'от 4 лет', j4s2:'Зарплата', j4v2:'от 1 800 $', j4s3:'График', j4v3:'Разъездной',
+        j4a:'Контроль строительства по проекту', j4b:'Взаимодействие с подрядчиками', j4c:'Ведение технической документации',
+        j5h:'Менеджер проектов', j5type:'Гибрид',
+        j5s1:'Опыт работы', j5v1:'от 2 лет в строительстве / дизайне', j5s2:'Зарплата', j5v2:'от 1 200 $ + бонусы',
+        j5s3:'Формат', j5v3:'офис + выезды на объекты', j5s4:'Задачи', j5v4:'Координация команды и клиентов',
+        j6h:'Стажёр-дизайнер', j6type:'Стажировка',
+        j6s1:'Опыт', j6v1:'Не требуется', j6s2:'Оплата', j6v2:'Оговаривается', j6s3:'Длительность', j6v3:'3 месяца',
+        j6a:'Помощь в разработке концепций', j6b:'Работа с реальными проектами', j6note:'Возможен перевод в штат',
+        j7h:'Стажёр-визуализатор', j7type:'Стажировка',
+        j7s1:'Опыт', j7v1:'Базовые знания 3ds Max', j7s2:'Оплата', j7v2:'Оговаривается', j7s3:'Длительность', j7v3:'3 месяца',
+        j7a:'Помощь в рендеринге сцен', j7b:'Настройка материалов и освещения', j7note:'Возможен перевод в штат',
+        j8h:'Не нашли подходящую?',
+        j8desc:'Отправьте резюме и портфолио — мы всегда открыты для талантливых людей. Рассмотрим возможности для вас лично.',
+        j8btn:'Отправить резюме',
+        ctah:'Готовы стать частью команды?', ctap:'Пишите — ответим в течение 24 часов', ctabtn:'Написать нам',
+        privacyLink:'Политика конфиденциальности',
+        pmLabel:'Документ', pmTitle:'Политика конфиденциальности'
+    },
+    en: {
+        nav1:'Home', nav2:'Interiors', nav3:'Architecture', nav4:'Services', nav5m:'Portfolio',
+        navCta:'Contact Us',
+        heroLabel:'Team', title:'Careers',
+        subtitle:'We are looking for talented people who share our passion for architecture and details.',
+        sec1:'Design & Architecture', sec2:'Production & Supervision', sec3:'Internship',
+        applyBtn:'Apply',
+        j1h:'Architect', j1type:'Full-time',
+        j1s1:'Experience', j1v1:'3+ years', j1s2:'Salary', j1v2:'from $2 000', j1s3:'Schedule', j1v3:'5/2, office',
+        j1a:'Architectural concept development', j1b:'Project management from brief to construction', j1c:'ArchiCAD / Revit proficiency',
+        j2h:'Interior Designer', j2type:'Full-time',
+        j2s1:'Experience', j2v1:'2+ years', j2s2:'Salary', j2v2:'from $1 500', j2s3:'Schedule', j2v3:'5/2, office',
+        j2a:'Design concepts and moodboards', j2b:'Working documentation development', j2c:'AutoCAD, 3ds Max / SketchUp',
+        j3h:'3D Visualiser / Architectural Renderer', j3type:'Full-time',
+        j3desc:'A key role in the team: you turn projects into photorealistic images.',
+        j3a:'Photorealistic interior and exterior visualisation', j3b:'3ds Max + Corona / V-Ray',
+        j3c:'Real material selection and setup', j3d:'Post-processing in Photoshop / Lightroom',
+        j3e:'2+ years experience, portfolio required', j3f:'Salary from $1 800 — negotiable',
+        j4h:'Author Supervision Engineer', j4type:'Full-time',
+        j4s1:'Experience', j4v1:'4+ years', j4s2:'Salary', j4v2:'from $1 800', j4s3:'Schedule', j4v3:'Field-based',
+        j4a:'Construction supervision per project', j4b:'Contractor coordination', j4c:'Technical documentation management',
+        j5h:'Project Manager', j5type:'Hybrid',
+        j5s1:'Experience', j5v1:'2+ years in construction / design', j5s2:'Salary', j5v2:'from $1 200 + bonuses',
+        j5s3:'Format', j5v3:'office + site visits', j5s4:'Responsibilities', j5v4:'Team and client coordination',
+        j6h:'Design Intern', j6type:'Internship',
+        j6s1:'Experience', j6v1:'Not required', j6s2:'Pay', j6v2:'Negotiable', j6s3:'Duration', j6v3:'3 months',
+        j6a:'Assist in concept development', j6b:'Work on real projects', j6note:'Full-time offer possible',
+        j7h:'3D Visualisation Intern', j7type:'Internship',
+        j7s1:'Experience', j7v1:'Basic 3ds Max knowledge', j7s2:'Pay', j7v2:'Negotiable', j7s3:'Duration', j7v3:'3 months',
+        j7a:'Assist in rendering scenes', j7b:'Material and lighting setup', j7note:'Full-time offer possible',
+        j8h:"Didn't find a match?",
+        j8desc:"Send your CV and portfolio — we're always open to talented people. We'll find the right opportunity for you.",
+        j8btn:'Send CV',
+        ctah:'Ready to join the team?', ctap:'Write to us — we reply within 24 hours', ctabtn:'Contact Us',
+        privacyLink:'Privacy Policy',
+        pmLabel:'Document', pmTitle:'Privacy Policy'
+    }
+};
+
+const PM = {
+    ru:{ body:`<style>#pmBody h2{font-size:15px;font-weight:700;color:#fff;margin:26px 0 10px;padding-left:14px;border-left:2px solid #c8a96e;}#pmBody h2:first-child{margin-top:0;}#pmBody p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.85;margin-bottom:10px;}#pmBody ul{margin:8px 0 14px;list-style:none;}#pmBody ul li{font-size:13px;color:rgba(255,255,255,.62);padding:6px 0 6px 18px;position:relative;border-bottom:1px solid rgba(255,255,255,.04);line-height:1.6;}#pmBody ul li:last-child{border-bottom:none;}#pmBody ul li::before{content:'—';position:absolute;left:0;color:#c8a96e;font-size:11px;top:8px;}#pmBody strong{color:#fff;font-weight:600;}</style><p><strong>ООО «Мукааб»</strong> уделяет большое значение защите персональных данных пользователей.</p><h2>1. Общие положения</h2><p>Политика определяет обязательства Оператора по защите персональных данных в соответствии с законодательством РБ.</p><h2>2. Контактные данные</h2><p>Email: <strong>privacy@mukaab.by</strong> · г. Минск, ул. Мележа 1, офис 405</p>` },
+    en:{ body:`<style>#pmBody h2{font-size:15px;font-weight:700;color:#fff;margin:26px 0 10px;padding-left:14px;border-left:2px solid #c8a96e;}#pmBody h2:first-child{margin-top:0;}#pmBody p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.85;margin-bottom:10px;}</style><p><strong>Mukaab LLC</strong> places great importance on the protection of users' personal data.</p><h2>1. General Provisions</h2><p>This Policy defines the Operator's obligations regarding personal data protection under Belarusian law.</p><h2>2. Contact Details</h2><p>Email: <strong>privacy@mukaab.by</strong> · Minsk, Melezh St. 1, office 405</p>` }
+};
+
+let lang = 'ru';
+
+function setLang(l) {
+    lang = l;
+    document.getElementById('btn-ru').classList.toggle('active', l==='ru');
+    document.getElementById('btn-en').classList.toggle('active', l==='en');
+    document.getElementById('mob-btn-ru').classList.toggle('active', l==='ru');
+    document.getElementById('mob-btn-en').classList.toggle('active', l==='en');
+    const merged = Object.assign({}, T[l], PM[l]);
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const k = el.getAttribute('data-i18n');
+        if (merged[k] !== undefined) el.innerHTML = merged[k];
+    });
+    const pov = document.getElementById('privacyOverlay');
+    if (pov && pov.style.visibility === 'visible') document.getElementById('pmBody').innerHTML = PM[l].body;
+    localStorage.setItem('lang', l);
+}
+
+function toggleContacts() { document.getElementById('contactMenu').classList.toggle('active'); }
+document.addEventListener('click', e => {
+    const d = document.querySelector('.contact-dropdown');
+    if(d && !d.contains(e.target)) document.getElementById('contactMenu').classList.remove('active');
+});
+
+function toggleMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const burger = document.getElementById('burger');
+    const open = menu.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+}
+document.querySelectorAll('.mobile-menu a').forEach(a => {
+    a.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.remove('open');
+        document.getElementById('burger').classList.remove('open');
+        document.body.style.overflow = '';
+    });
+});
+function toggleMobileContacts() { document.getElementById('mobileContactMenu').classList.toggle('active'); }
+
+/* ─── APPLY MODAL ─── */
+function openApply(position) {
+    document.getElementById('applyTitle').textContent = position;
+    document.getElementById('applyError').style.display = 'none';
+    document.getElementById('applySuccess').style.display = 'none';
+    document.getElementById('aName').value = '';
+    document.getElementById('aContact').value = '';
+    document.getElementById('aPortfolio').value = '';
+    document.getElementById('aMessage').value = '';
+    const ov = document.getElementById('applyOverlay');
+    const mo = document.getElementById('applyModal');
+    ov.style.opacity = '1'; ov.style.visibility = 'visible';
+    mo.style.transform = 'translateY(0) scale(1)';
+    document.body.style.overflow = 'hidden';
+}
+function closeApply() {
+    const ov = document.getElementById('applyOverlay');
+    const mo = document.getElementById('applyModal');
+    ov.style.opacity = '0'; ov.style.visibility = 'hidden';
+    mo.style.transform = 'translateY(24px) scale(.97)';
+    document.body.style.overflow = '';
+}
+function submitApply() {
+    const name = document.getElementById('aName').value.trim();
+    const contact = document.getElementById('aContact').value.trim();
+    const err = document.getElementById('applyError');
+    const suc = document.getElementById('applySuccess');
+    if (!name || !contact) { err.style.display = 'block'; return; }
+    err.style.display = 'none';
+    suc.style.display = 'block';
+    setTimeout(() => closeApply(), 2500);
+}
+document.getElementById('applyOverlay').addEventListener('click', e => { if(e.target === document.getElementById('applyOverlay')) closeApply(); });
+
+/* ─── PRIVACY MODAL ─── */
+function openPrivacy() {
+    document.getElementById('pmBody').innerHTML = PM[lang].body;
+    const ov = document.getElementById('privacyOverlay');
+    const mo = document.getElementById('privacyModal');
+    ov.style.opacity = '1'; ov.style.visibility = 'visible';
+    mo.style.transform = 'translateY(0) scale(1)';
+    document.body.style.overflow = 'hidden';
+}
+function closePrivacy() {
+    const ov = document.getElementById('privacyOverlay');
+    const mo = document.getElementById('privacyModal');
+    ov.style.opacity = '0'; ov.style.visibility = 'hidden';
+    mo.style.transform = 'translateY(24px) scale(.97)';
+    document.body.style.overflow = '';
+}
+document.getElementById('privacyOverlay').addEventListener('click', e => { if(e.target === document.getElementById('privacyOverlay')) closePrivacy(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape'){closePrivacy();closeApply();} });
+
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+const saved = localStorage.getItem('lang');
+if (saved) setLang(saved);
+</script>
+</body>
+</html>

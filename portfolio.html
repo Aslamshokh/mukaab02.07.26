@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUKAAB — Портфолио</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+    --gold: #ffffff;
+    --gold-a: #fafafa;
+    --blue: rgba(0,81,255,0.40);
+    --blue-h: #2601faaf;
+    --muted: rgba(255,255,255,0.55);
+}
+
+body {
+    background:#050505;
+    color:#fff;
+    font-family:'Montserrat',sans-serif;
+    overflow-x:hidden;
+    padding-top:90px;
+}
+img { width:100%; display:block; }
+a { text-decoration:none; color:inherit; }
+
+/* ─── NAVBAR ─── */
+.navbar {
+    position:fixed; top:0; left:0;
+    width:100%; height:90px; padding:0 50px;
+    display:flex; align-items:center; justify-content:space-between;
+    z-index:99999;
+    background:rgba(0,0,0,0.185);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(22,15,15,0.103);
+    transition:background .4s, border-color .4s;
+}
+.navbar.scrolled {
+    background:rgba(5,5,5,0.92);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.nav-left { display:flex; gap:24px; }
+.nav-left a { color:#fff; font-size:14px; font-weight:500; opacity:.7; transition:.3s; }
+.nav-left a:hover { opacity:1; }
+.logo { position:absolute; left:50%; transform:translateX(-50%); }
+.logo img { width:140px; height:auto; object-fit:contain; }
+.nav-right { display:flex; align-items:center; gap:18px; flex-shrink:0; margin-right:6px; }
+.nav-right a { color:#fff; font-size:14px; opacity:.7; transition:.3s; }
+.nav-right a:hover { opacity:1; }
+.lang-switch { display:flex; gap:10px; }
+.lang-switch button {
+    width:42px; height:42px; border-radius:50%;
+    border:1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.05);
+    color:#fff; cursor:pointer;
+    font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700; transition:.3s;
+}
+.lang-switch button.active { background:#1d4ed8; }
+.nav-cta {
+    height:52px; padding:0 24px; border:none; border-radius:999px;
+    background:linear-gradient(135deg,rgba(0,81,255,.95),rgba(37,99,235,.95));
+    color:#fff; font-size:14px; font-weight:700; font-family:'Montserrat',sans-serif;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:.35s; white-space:nowrap;
+    box-shadow:0 12px 35px rgba(37,99,235,.30);
+}
+.nav-cta:hover {
+    transform:translateY(-2px);
+    box-shadow:0 18px 45px rgba(37,99,235,.45);
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+}
+.contact-dropdown { position:relative; }
+.contact-menu {
+    position:absolute; top:65px; right:0;
+    width:220px; padding:12px; border-radius:22px;
+    background:rgba(10,10,10,.96); backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.08);
+    display:flex; flex-direction:column; gap:8px;
+    opacity:0; visibility:hidden; transform:translateY(10px); transition:.35s; z-index:999;
+}
+.contact-menu.active { opacity:1; visibility:visible; transform:translateY(0); }
+.contact-menu a {
+    height:50px; border-radius:14px;
+    display:flex; align-items:center; padding:0 18px;
+    background:rgba(255,255,255,.03); color:#fff;
+    font-size:14px; font-weight:600; transition:.3s;
+}
+.contact-menu a:hover { background:rgba(0,81,255,.22); transform:translateX(4px); }
+
+/* ─── BURGER ─── */
+.burger {
+    display:none; flex-direction:column; justify-content:center;
+    align-items:center; gap:5px; width:42px; height:42px;
+    border-radius:50%; border:1px solid rgb(0,0,0);
+    background:rgba(0,0,0,0.05); cursor:pointer;
+    z-index:1001; transition:background .3s; flex-shrink:0;
+}
+.burger:hover { background:rgba(26,24,24,0.1); }
+.burger span {
+    display:block; width:18px; height:1.5px;
+    background:#fff; border-radius:2px;
+    transition:transform .35s, opacity .35s; transform-origin:center;
+}
+.burger.open span:nth-child(1) { transform:translateY(6.5px) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
+.burger.open span:nth-child(3) { transform:translateY(-6.5px) rotate(-45deg); }
+
+/* ─── MOBILE MENU ─── */
+.mobile-menu {
+    position:fixed; top:90px; left:0; width:100%;
+    background:rgba(5,5,5,0.98); backdrop-filter:blur(24px);
+    border-bottom:1px solid rgba(255,255,255,0.07);
+    padding:28px 24px 32px;
+    display:flex; flex-direction:column; gap:0;
+    transform:translateY(-110%); opacity:0;
+    transition:transform .4s cubic-bezier(.19,1,.22,1), opacity .35s;
+    z-index:998; pointer-events:none;
+}
+.mobile-menu.open { transform:translateY(0); opacity:1; pointer-events:all; }
+.mobile-menu a {
+    display:block; color:rgba(255,255,255,.72);
+    font-size:15px; font-weight:500; padding:14px 0;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    transition:color .25s; letter-spacing:.02em;
+}
+.mobile-menu a:last-of-type { border-bottom:none; }
+.mobile-menu a:hover { color:#fff; }
+.mobile-menu-lang {
+    display:flex; gap:10px; margin-top:22px;
+    padding-top:22px; border-top:1px solid rgba(255,255,255,.07);
+}
+.mobile-menu-lang button {
+    width:46px; height:46px; border-radius:50%;
+    border:1px solid rgba(255,255,255,0.10);
+    background:rgba(255,255,255,0.05); color:#fff;
+    font-size:13px; font-weight:700; font-family:'Montserrat',sans-serif;
+    cursor:pointer; transition:.3s;
+}
+.mobile-menu-lang button:hover,
+.mobile-menu-lang button.active { background:rgba(0,81,255,.42); border-color:rgba(0,81,255,.5); }
+.mobile-contact-dropdown { position:relative; margin-top:18px; }
+.mobile-menu-cta {
+    width:100%; height:54px; margin-top:18px; border:none; border-radius:18px;
+    background:linear-gradient(135deg,rgba(0,81,255,.95),rgba(37,99,235,.95));
+    color:#fff; font-size:15px; font-weight:700; font-family:'Montserrat',sans-serif;
+    cursor:pointer; transition:.35s;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 30px rgba(37,99,235,.28);
+}
+.mobile-menu-cta:hover { transform:translateY(-2px); box-shadow:0 18px 40px rgba(37,99,235,.42); }
+.mobile-contact-menu {
+    display:flex; flex-direction:column; gap:8px; margin-top:12px;
+    opacity:0; visibility:hidden; max-height:0; overflow:hidden; transition:.35s ease;
+}
+.mobile-contact-menu.active { opacity:1; visibility:visible; max-height:300px; }
+.mobile-contact-menu a {
+    height:52px; border-radius:16px;
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:14px; font-weight:600; transition:.3s;
+}
+.mobile-contact-menu a:hover { background:rgba(0,81,255,.18); border-color:rgba(0,81,255,.28); }
+
+/* ─── HERO ─── */
+.hero {
+    position:relative; height:62vh; min-height:380px; overflow:hidden;
+}
+.hero-image {
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; filter:brightness(.70); transition:transform 8s ease;
+}
+.hero:hover .hero-image { transform:scale(1.04); }
+.hero-overlay {
+    position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,.97) 0%, rgba(0,0,0,.30) 55%, transparent 100%);
+}
+.hero-content { position:absolute; bottom:52px; left:60px; z-index:2; }
+.hero-label {
+    display:block; font-size:11px; letter-spacing:.38em;
+    text-transform:uppercase; color:var(--gold); font-weight:700; margin-bottom:14px;
+}
+.hero-content h1 {
+    font-size:clamp(40px,6.5vw,80px); font-weight:800;
+    letter-spacing:-.03em; line-height:1.05; margin-bottom:16px;
+}
+.hero-content p { font-size:15px; color:rgba(255,255,255,.60); max-width:520px; line-height:1.7; }
+
+/* ─── PORTFOLIO PANEL ─── */
+.portfolio-panel {
+    max-width:1320px; margin:0 auto;
+    padding:72px 40px 100px;
+}
+
+/* Filter tabs — same style as panel-section-label */
+.filter-bar {
+    display:flex; align-items:center; gap:12px;
+    margin-bottom:40px; flex-wrap:wrap;
+}
+.filter-label {
+    font-size:10px; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--gold-a); font-weight:700; white-space:nowrap; margin-right:8px;
+}
+.filter-btn {
+    height:36px; padding:0 18px; border-radius:50px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.03);
+    color:rgba(255,255,255,.55); font-size:12px; font-weight:600;
+    font-family:'Montserrat',sans-serif;
+    cursor:pointer; transition:.3s; letter-spacing:.03em;
+}
+.filter-btn:hover { border-color:rgba(255,255,255,.22); color:#fff; }
+.filter-btn.active {
+    background:rgba(0,81,255,.30); border-color:rgba(0,81,255,.55);
+    color:#fff;
+}
+
+/* Section label — identical to reference file */
+.panel-section-label {
+    display:flex; align-items:center; gap:20px;
+    margin-top:14px; margin-bottom:24px;
+}
+.panel-section-label span {
+    font-size:10px; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--gold-a); font-weight:700; white-space:nowrap;
+}
+.panel-section-label::after {
+    content:''; flex:1; height:1px; background:rgba(255,255,255,.07);
+}
+
+/* ─── PROJECT GRID ─── */
+.project-grid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+/* ─── PROJECT CARD ─── */
+.project-card {
+    border:1px solid rgba(255,255,255,0.07);
+    background:rgba(255,255,255,0.025);
+    backdrop-filter:blur(14px);
+    cursor:pointer;
+    transition:border-color .4s, background .4s, transform .35s;
+    position:relative;
+    overflow:hidden;
+    display:flex; flex-direction:column;
+}
+.project-card:hover {
+    border-color:rgba(0,81,255,.35);
+    background:rgba(0,81,255,.04);
+    transform:translateY(-3px);
+}
+.project-card.featured {
+    border-color:rgba(200,169,110,.28);
+    background:rgba(200,169,110,.03);
+}
+.project-card.featured:hover {
+    border-color:rgba(200,169,110,.55);
+    background:rgba(200,169,110,.06);
+}
+.project-card.wide { grid-column:span 2; }
+.project-card.tall .card-thumb { height:340px; }
+
+/* Thumbnail */
+.card-thumb {
+    width:100%; height:220px; overflow:hidden; position:relative; flex-shrink:0;
+}
+.card-thumb img {
+    width:100%; height:100%; object-fit:cover;
+    transition:transform 6s ease;
+    filter:brightness(.82);
+}
+.project-card:hover .card-thumb img { transform:scale(1.06); }
+
+/* hover overlay with "Открыть" */
+.card-thumb-overlay {
+    position:absolute; inset:0;
+    background:rgba(0,0,0,.45);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; transition:.35s;
+}
+.project-card:hover .card-thumb-overlay { opacity:1; }
+.open-label {
+    height:44px; padding:0 26px; border-radius:50px;
+    border:1px solid rgba(255,255,255,.35);
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(10px);
+    color:#fff; font-size:13px; font-weight:700;
+    font-family:'Montserrat',sans-serif; letter-spacing:.06em;
+    display:flex; align-items:center; gap:8px;
+}
+.open-label svg { width:14px; height:14px; }
+
+/* Card category tag */
+.card-tag {
+    position:absolute; top:14px; left:14px;
+    padding:4px 12px;
+    background:rgba(0,0,0,.65); backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.12);
+    font-size:10px; font-weight:700; letter-spacing:.1em;
+    text-transform:uppercase; color:rgba(255,255,255,.8);
+}
+
+/* Card body */
+.card-body { padding:22px 24px 26px; display:flex; flex-direction:column; gap:10px; flex:1; }
+.card-title { font-size:17px; font-weight:700; letter-spacing:-.01em; line-height:1.2; }
+.card-meta {
+    display:flex; gap:16px; flex-wrap:wrap;
+    font-size:12px; color:rgba(255,255,255,.45); font-weight:500;
+}
+.card-meta span { display:flex; align-items:center; gap:5px; }
+.card-desc {
+    font-size:13px; color:rgba(255,255,255,.55); line-height:1.7;
+    margin-top:2px;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+
+/* ─── PROJECT MODAL ─── */
+.proj-overlay {
+    position:fixed; inset:0; z-index:99998;
+    background:rgba(0,0,0,.70); backdrop-filter:blur(22px);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden; transition:.4s ease;
+    padding:20px;
+}
+.proj-overlay.open { opacity:1; visibility:visible; }
+
+.proj-modal {
+    width:min(1080px,96vw); max-height:90vh;
+    background:rgba(8,8,8,.97);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:4px;
+    overflow:hidden; position:relative;
+    box-shadow:0 50px 120px rgba(0,0,0,.75),
+               inset 0 1px 0 rgba(255,255,255,.05);
+    transform:translateY(30px) scale(.97);
+    transition:.45s cubic-bezier(.19,1,.22,1);
+    display:flex; flex-direction:column;
+}
+.proj-overlay.open .proj-modal { transform:translateY(0) scale(1); }
+
+/* Gallery */
+.proj-gallery {
+    position:relative; height:420px; overflow:hidden; flex-shrink:0;
+}
+.gallery-track {
+    display:flex; height:100%;
+    transition:transform .55s cubic-bezier(.25,.46,.45,.94);
+}
+.gallery-slide {
+    min-width:100%; height:100%; flex-shrink:0;
+    position:relative;
+}
+.gallery-slide img {
+    width:100%; height:100%; object-fit:cover; filter:brightness(.85);
+}
+.gallery-overlay {
+    position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,.92) 0%, rgba(0,0,0,.10) 45%, transparent 100%);
+}
+.gallery-counter {
+    position:absolute; bottom:18px; right:20px;
+    font-size:12px; font-weight:700; color:rgba(255,255,255,.6);
+    letter-spacing:.08em;
+}
+.gallery-btn {
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:46px; height:46px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.15);
+    background:rgba(0,0,0,.45); backdrop-filter:blur(8px);
+    color:#fff; font-size:18px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:.3s; z-index:2;
+}
+.gallery-btn:hover { background:rgba(0,81,255,.45); border-color:rgba(0,81,255,.5); }
+.gallery-btn.prev { left:16px; }
+.gallery-btn.next { right:16px; }
+
+/* Thumbnails strip */
+.thumb-strip {
+    display:flex; gap:8px; padding:12px 32px;
+    background:rgba(0,0,0,.6); flex-shrink:0; overflow-x:auto;
+    scrollbar-width:none;
+}
+.thumb-strip::-webkit-scrollbar { display:none; }
+.thumb-item {
+    width:64px; height:44px; flex-shrink:0; cursor:pointer;
+    border:2px solid rgba(255,255,255,.08); overflow:hidden;
+    transition:border-color .3s;
+}
+.thumb-item.active { border-color:rgba(0,81,255,.7); }
+.thumb-item img { width:100%; height:100%; object-fit:cover; }
+
+/* Modal body */
+.proj-body {
+    padding:32px 40px 36px; overflow-y:auto; flex:1;
+    scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.1) transparent;
+    display:grid; grid-template-columns:1fr 300px; gap:36px;
+}
+
+.proj-info {}
+.proj-cat-label {
+    font-size:10px; letter-spacing:.35em; text-transform:uppercase;
+    color:var(--gold-a); font-weight:700; margin-bottom:10px; display:block;
+}
+.proj-title { font-size:clamp(22px,3vw,32px); font-weight:800; letter-spacing:-.02em; margin-bottom:16px; }
+.proj-desc { font-size:14px; color:rgba(255,255,255,.65); line-height:1.85; }
+
+.proj-meta-panel { display:flex; flex-direction:column; gap:0; }
+.proj-meta-row {
+    display:flex; justify-content:space-between; align-items:flex-start;
+    padding:12px 0; border-bottom:1px solid rgba(255,255,255,.05);
+    font-size:13px;
+}
+.proj-meta-row:last-child { border-bottom:none; }
+.proj-meta-key { color:rgba(255,255,255,.40); font-weight:500; flex-shrink:0; padding-right:12px; }
+.proj-meta-val { color:#fff; font-weight:600; text-align:right; }
+
+.proj-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+.proj-tag {
+    padding:6px 14px; border:1px solid rgba(255,255,255,.09);
+    background:rgba(255,255,255,.03);
+    font-size:11px; font-weight:600; color:rgba(255,255,255,.55);
+    letter-spacing:.04em;
+}
+
+/* Close btn */
+.modal-close {
+    position:absolute; top:18px; right:18px; z-index:10;
+    width:40px; height:40px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(0,0,0,.55); backdrop-filter:blur(10px);
+    color:rgba(255,255,255,.7); font-size:18px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:.25s; font-family:'Montserrat',sans-serif;
+}
+.modal-close:hover {
+    transform:rotate(90deg);
+    background:rgba(255,255,255,.12); color:#fff;
+}
+
+/* ─── CTA ROW ─── */
+.cta-row {
+    display:flex; align-items:center; justify-content:space-between;
+    gap:24px; padding:40px 44px; margin-top:60px;
+    border:1px solid rgba(255,255,255,.07);
+    background:rgba(255,255,255,.02);
+    flex-wrap:wrap;
+}
+.cta-row h3 { font-size:clamp(20px,2.8vw,30px); font-weight:800; letter-spacing:-.02em; margin-bottom:8px; }
+.cta-row p { font-size:14px; color:var(--muted); }
+.cta-btn {
+    height:52px; padding:0 34px; border-radius:50px;
+    background:var(--blue); border:1px solid rgba(255,255,255,.20);
+    color:#fff; font-size:15px; font-family:'Montserrat',sans-serif;
+    font-weight:700; cursor:pointer; transition:.4s;
+    white-space:nowrap; letter-spacing:.04em;
+}
+.cta-btn:hover { background:var(--blue-h); }
+
+/* ─── FOOTER ─── */
+.footer {
+    padding:36px 40px; border-top:1px solid rgba(255,255,255,.07);
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:13px; color:var(--muted); flex-wrap:wrap; gap:12px;
+}
+
+/* ─── PRIVACY MODAL ─── */
+.priv-overlay {
+    position:fixed; inset:0; z-index:999999;
+    background:rgba(0,0,0,0.55); backdrop-filter:blur(16px);
+    display:flex; justify-content:center; align-items:center;
+    opacity:0; visibility:hidden; transition:.35s ease;
+}
+.priv-overlay.open { opacity:1; visibility:visible; }
+.priv-modal {
+    width:min(860px,94vw); height:min(780px,90vh);
+    background:rgba(8,8,8,0.96);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:4px; overflow:hidden; position:relative;
+    backdrop-filter:blur(30px);
+    box-shadow:0 40px 100px rgba(0,0,0,0.65),inset 0 1px 0 rgba(255,255,255,0.05);
+    transform:translateY(24px) scale(.97);
+    transition:.45s cubic-bezier(.19,1,.22,1);
+    display:flex; flex-direction:column;
+}
+.priv-overlay.open .priv-modal { transform:translateY(0) scale(1); }
+.priv-head {
+    padding:32px 40px 26px;
+    border-bottom:1px solid rgba(255,255,255,0.07);
+    background:linear-gradient(to bottom,rgba(255,255,255,.025),transparent);
+    flex-shrink:0;
+}
+.priv-body {
+    padding:32px 40px 40px; overflow-y:auto; flex:1;
+    scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.1) transparent;
+}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1020px){
+    .project-grid { grid-template-columns:1fr 1fr; }
+    .project-card.wide { grid-column:span 2; }
+    .proj-body { grid-template-columns:1fr; }
+    .proj-meta-panel { grid-row:1; }
+}
+@media(max-width:760px){
+    .navbar { padding:0 20px; }
+    .nav-left { display:none; }
+    .nav-right { display:none; }
+    .burger { display:flex; }
+    .logo { margin:0 auto; }
+}
+@media(max-width:680px){
+    .project-grid { grid-template-columns:1fr; }
+    .project-card.wide { grid-column:span 1; }
+    .hero-content { left:24px; bottom:36px; }
+    .portfolio-panel { padding:40px 16px 70px; }
+    .proj-gallery { height:260px; }
+    .proj-body { padding:24px 20px 28px; }
+    .cta-row { padding:28px 20px; flex-direction:column; align-items:flex-start; }
+    .footer { flex-direction:column; align-items:flex-start; padding:28px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<header class="navbar" id="navbar">
+    <div class="nav-left">
+        <a href="mukaab.html" data-i18n="nav1">Главная</a>
+        <a href="" data-i18n="nav2">Интерьеры</a>
+        <a href="Architecture service2.html" data-i18n="nav3">Архитектура</a>
+    </div>
+
+    <a class="logo" href="mukaab.html">
+        <img src="images/LOGO-2.png" alt="MUKAAB">
+    </a>
+
+    <div class="nav-right">
+        <a href="services.html" data-i18n="nav4">Услуги</a>
+        <a href="portfolio.html" data-i18n="nav5m" style="opacity:1;">Портфолио</a>
+        <div class="lang-switch">
+            <button onclick="setLang('ru')" id="btn-ru" class="active">RU</button>
+            <button onclick="setLang('en')" id="btn-en">EN</button>
+        </div>
+        <div class="contact-dropdown">
+            <button class="nav-cta" onclick="toggleContacts()" data-i18n="navCta">Написать нам</button>
+            <div class="contact-menu" id="contactMenu">
+                <a href="https://t.me/mukaab_company" target="_blank">Telegram</a>
+                <a href="https://wa.me/375339161111" target="_blank">WhatsApp</a>
+                <a href="mailto:mukaabcompany@gmail.com">mukaabcompany@gmail.com</a>
+            </div>
+        </div>
+    </div>
+
+    <button class="burger" id="burger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+</header>
+
+<!-- ── MOBILE MENU ── -->
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="mukaab.html" data-i18n="nav1">Главная</a>
+    <a href="мinterior-design1.html" data-i18n="nav2">Интерьеры</a>
+    <a href="Architecture service2.html" data-i18n="nav3">Архитектура</a>
+    <a href="services.html" data-i18n="nav4">Услуги</a>
+    <a href="portfolio.html" data-i18n="nav5m">Портфолио</a>
+    <div class="mobile-menu-lang">
+        <button onclick="setLang('ru')" id="mob-btn-ru" class="active">RU</button>
+        <button onclick="setLang('en')" id="mob-btn-en">EN</button>
+    </div>
+    <div class="mobile-contact-dropdown">
+        <button class="mobile-menu-cta" onclick="toggleMobileContacts()" data-i18n="navCta">Написать нам</button>
+        <div class="mobile-contact-menu" id="mobileContactMenu">
+            <a href="https://t.me/mukaab_company" target="_blank">Telegram</a>
+            <a href="https://wa.me/375339161111" target="_blank">WhatsApp</a>
+            <a href="mailto:mukaabcompany@gmail.com">E-mail</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+    <img src="images/portfolio.png" class="hero-image" alt="Портфолио">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <span class="hero-label" data-i18n="heroLabel">MUKAAB</span>
+        <h1 data-i18n="title">Портфолио</h1>
+        <p data-i18n="subtitle">Реализованные проекты в области интерьерного дизайна, архитектуры и авторского надзора.</p>
+    </div>
+</section>
+
+<!-- ── PORTFOLIO ── -->
+<section class="portfolio-panel">
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+        <span class="filter-label" data-i18n="filterLabel">Категория</span>
+        <button class="filter-btn active" data-cat="all" data-i18n="catAll">Все работы</button>
+        <button class="filter-btn" data-cat="interior" data-i18n="catInt">Интерьер</button>
+        <button class="filter-btn" data-cat="arch" data-i18n="catArch">Архитектура</button>
+        <button class="filter-btn" data-cat="furniture" data-i18n="catFurniture">Мебель</button>
+        <button class="filter-btn" data-cat="commercial" data-i18n="catComm">Коммерческие</button>
+    </div>
+
+    <!-- ─ Интерьеры ─ -->
+    <div class="panel-section-label"><span data-i18n="secInt">Интерьерный дизайн</span></div>
+
+    <div class="project-grid" id="projectGrid">
+
+        <!-- 1 -->
+        <div class="project-card wide tall" data-cat="interior" data-project="0" onclick="openProject(0)">
+            <div class="card-thumb">
+                <img src="images/proj1_cover.jpg" alt="Апартаменты Минск">
+                <div class="card-thumb-overlay">
+                    <div class="open-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                        <span data-i18n="openBtn">Открыть проект</span>
+                    </div>
+                </div>
+                <div class="card-tag" data-i18n="catInt">Интерьер</div>
+            </div>
+            <div class="card-body">
+                <div class="card-title" data-i18n="p0title">Апартаменты в Минске — 120 м²</div>
+                <div class="card-meta">
+                    <span>📍 Минск</span>
+                    <span>📐 120 м²</span>
+                    <span>🏠 Жилой</span>
+                </div>
+                <div class="card-desc" data-i18n="p0short">Минималистичный интерьер в нейтральной палитре с акцентом на фактуры натурального камня и дерева.</div>
+            </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="project-card" data-cat="interior" data-project="1" onclick="openProject(1)">
+            <div class="card-thumb">
+                <img src="images/1.png" alt="Загородный дом">
+                <div class="card-thumb-overlay">
+                    <div class="open-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                        <span data-i18n="openBtn">Открыть проект</span>
+                    </div>
+                </div>
+                <div class="card-tag" data-i18n="catInt">Интерьер</div>
+            </div>
+            <div class="card-body">
+                <div class="card-title" data-i18n="p1title">Загородный дом — 280 м²</div>
+                <div class="card-meta">
+                    <span>📍 Минский р-н</span>
+                    <span>📐 280 м²</span>
+                </div>
+                <div class="card-desc" data-i18n="p1short">Тёплый скандинавский стиль с элементами japandi — дерево, лён, натуральный свет.</div>
+            </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="project-card featured" data-cat="interior" data-project="2" onclick="openProject(2)">
+            <div class="card-thumb">
+                <img src="images/proj3_cover.jpg" alt="Пентхаус">
+                <div class="card-thumb-overlay">
+                    <div class="open-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                        <span data-i18n="openBtn">Открыть проект</span>
+                    </div>
+                </div>
+                <div class="card-tag">Premium</div>
+            </div>
+            <div class="card-body">
+                <div class="card-title" data-i18n="p2title">Пентхаус — 340 м²</div>
+                <div class="card-meta">
+                    <span>📍 Минск</span>
+                    <span>📐 340 м²</span>
+                </div>
+                <div class="card-desc" data-i18n="p2short">Представительский интерьер с панорамными видами. Мрамор, латунь, велюр, авторская мебель.</div>
+            </div>
+        </div>
+
+        <!-- ─ Архитектура ─ -->
+        <div class="panel-section-label" style="grid-column:1/-1"><span data-i18n="secArch">Архитектура и фасады</span></div>
+
+        <!-- 4 -->
+        <div class="project-card" data-cat="arch" data-project="3" onclick="openProject(3)">
+            <div class="card-thumb">
+                <img src="images/3.jpg" alt="Частный дом">
+                <div class="card-thumb-overlay">
+                    <div class="open-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                        <span data-i18n="openBtn">Открыть проект</span>
+                    </div>
+                </div>
+                <div class="card-tag" data-i18n="catArch">Архитектура</div>
+            </div>
+            <div class="card-body">
+                <div class="card-title" data-i18n="p3title">Частный дом — концепция фасада</div>
+                <div class="card-meta"><span>📍 Минский р-н</span><span>📐 420 м²</span></div>
+                <div class="card-desc" data-i18n="p3short">Современный минималистичный фасад из клинкерного кирпича и тёмного металла.</div>
+            </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="project-card wide" data-cat="arch" data-project="4" onclick="openProject(4)">
+            <div class="card-thumb">
+                <img src="images/proj5_cover.jpg" alt="Вилла">
+                <div class="card-thumb-overlay">
+                    <div class="open-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                        <span data-i18n="openBtn">Открыть проект</span>
+                    </div>
+                </div>
+                <div class="card-tag" data-i18n="catArch">Архитектура</div>
+            </div>
+            <div class="card-body">
+                <div class="card-title" data-i18n="p4title">Вилла на озере — авторский надзор</div>
+                <div class="card-meta"><span>📍 Нарочь</span><span>📐 560 м²</span></div>
+                <div class="card-desc" data-i18n="p4short">Полный цикл от проекта до сдачи. Стекло, бетон, дерево — органичная связь с ландшафтом.</div>
+            </div>
+        </div>
+
+        <!-- ─ Коммерческие ─ -->
+        <div class="panel-section-label" style="grid-column:1/-1"><span data-i18n="secComm">Коммерческие объекты</span></div>
+
+        <!-- 6 -->
+        <div class="project-card" data-cat="commercial" data-project="5" onclick="openProject(5)">
+            <div class="card-thumb">
+                <img src="images/proj6_cover.jpg" alt="Ресторан">
+                <div class="card-thumb-overlay">
+                    <div class="open-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                        <span data-i18n="openBtn">Открыть проект</span>
+                    </div>
+                </div>
+                <div class="card-tag" data-i18n="catComm">Коммерческий</div>
+            </div>
+            <div class="card-body">
+                <div class="card-title" data-i18n="p5title">Ресторан fine dining — Минск</div>
+                <div class="card-meta"><span>📍 Минск</span><span>📐 240 м²</span></div>
+                <div class="card-desc" data-i18n="p5short">Камерная атмосфера, тёмная палитра, латунь и вельвет. Акустическое зонирование.</div>
+            </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="project-card" data-cat="commercial" data-project="6" onclick="openProject(6)">
+            <div class="card-thumb">
+                <img src="images/proj7_cover.jpg" alt="Офис">
+                <div class="card-thumb-overlay">
+                    <div class="open-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                        <span data-i18n="openBtn">Открыть проект</span>
+                    </div>
+                </div>
+                <div class="card-tag" data-i18n="catComm">Офис</div>
+            </div>
+            <div class="card-body">
+                <div class="card-title" data-i18n="p6title">IT-офис — 1 200 м²</div>
+                <div class="card-meta"><span>📍 Минск</span><span>📐 1 200 м²</span></div>
+                <div class="card-desc" data-i18n="p6short">Гибкое зонирование, акустика, зоны отдыха и переговорных. Корпоративный брендинг в интерьере.</div>
+            </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="project-card featured" data-cat="commercial" data-project="7" onclick="openProject(7)">
+            <div class="card-thumb">
+                <img src="images/proj8_cover.jpg" alt="Отель">
+                <div class="card-thumb-overlay">
+                    <div class="open-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                        <span data-i18n="openBtn">Открыть проект</span>
+                    </div>
+                </div>
+                <div class="card-tag">Hotel</div>
+            </div>
+            <div class="card-body">
+                <div class="card-title" data-i18n="p7title">Бутик-отель — 32 номера</div>
+                <div class="card-meta"><span>📍 Минск</span><span>📐 2 800 м²</span></div>
+                <div class="card-desc" data-i18n="p7short">Авторская концепция интерьеров: лобби, ресторан, номера. Полный авторский надзор.</div>
+            </div>
+        </div>
+
+    </div><!-- /project-grid -->
+
+    <!-- CTA -->
+    <div class="cta-row">
+        <div>
+            <h3 data-i18n="ctah">Обсудим ваш проект?</h3>
+            <p data-i18n="ctap">Расскажите о задаче — ответим в течение часа</p>
+        </div>
+        <button class="cta-btn" data-i18n="ctabtn">Связаться с нами</button>
+    </div>
+
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+    <div>© 2026 MUKAAB</div>
+    <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+        <span style="color:rgba(255,255,255,.4);font-size:13px;" data-i18n="footsub">Premium Design Studio</span>
+        <button onclick="openPrivacy()" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer;font-family:'Montserrat',sans-serif;transition:.3s;padding:0;"
+            onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.4)'"
+            data-i18n="privacyLink">Политика конфиденциальности</button>
+    </div>
+</footer>
+
+<!-- ── PROJECT MODAL ── -->
+<div class="proj-overlay" id="projOverlay" onclick="handleOverlayClick(event)">
+    <div class="proj-modal" id="projModal">
+        <button class="modal-close" onclick="closeProject()">✕</button>
+
+        <!-- Gallery -->
+        <div class="proj-gallery">
+            <div class="gallery-track" id="galleryTrack"></div>
+            <div class="gallery-overlay"></div>
+            <button class="gallery-btn prev" onclick="galleryPrev()">‹</button>
+            <button class="gallery-btn next" onclick="galleryNext()">›</button>
+            <div class="gallery-counter" id="galleryCounter">1 / 1</div>
+        </div>
+
+        <!-- Thumb strip -->
+        <div class="thumb-strip" id="thumbStrip"></div>
+
+        <!-- Body -->
+        <div class="proj-body">
+            <div class="proj-info">
+                <span class="proj-cat-label" id="mCat"></span>
+                <div class="proj-title" id="mTitle"></div>
+                <div class="proj-desc" id="mDesc"></div>
+                <div class="proj-tags" id="mTags"></div>
+            </div>
+            <div class="proj-meta-panel" id="mMeta"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ── PRIVACY MODAL ── -->
+<div class="priv-overlay" id="privOverlay" onclick="if(event.target===this)closePrivacy()">
+    <div class="priv-modal">
+        <div class="priv-head">
+            <div style="font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:#c8a96e;font-weight:700;margin-bottom:12px;" data-i18n="pmLabel">Документ</div>
+            <div style="font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.02em;margin-bottom:6px;" data-i18n="pmTitle">Политика конфиденциальности</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.45);">© ООО «Мукааб» · mukaab.by</div>
+        </div>
+        <div class="priv-body" id="privBody"></div>
+        <button onclick="closePrivacy()" class="modal-close" style="top:18px;right:18px;">✕</button>
+    </div>
+</div>
+
+<script>
+/* ════════════════════════════════════
+   PROJECT DATA
+   Замените images/projN_X.jpg на реальные пути
+════════════════════════════════════ */
+const PROJECTS = [
+    {
+        cat:    { ru:'Интерьер', en:'Interior' },
+        title:  { ru:'Апартаменты в Минске — 120 м²', en:'Minsk Apartment — 120 m²' },
+        desc:   { ru:'Минималистичный интерьер в нейтральной палитре с акцентом на фактуры натурального камня и дерева. Открытая планировка, скрытые системы хранения, авторская мебель под заказ. Реализовано в 2024 году — от дизайн-проекта до авторского надзора.', en:'Minimalist interior in a neutral palette with an emphasis on natural stone and wood textures. Open plan, concealed storage, bespoke furniture. Completed in 2024 — from design concept to construction supervision.' },
+        images: ['images/1.png','images/1.png','images/proj1_3.jpg','images/proj1_4.jpg'],
+        meta: [
+            { ru:['Локация','Минск'], en:['Location','Minsk'] },
+            { ru:['Площадь','120 м²'], en:['Area','120 m²'] },
+            { ru:['Тип','Жилой'], en:['Type','Residential'] },
+            { ru:['Стиль','Минимализм'], en:['Style','Minimalism'] },
+            { ru:['Год','2024'], en:['Year','2024'] },
+            { ru:['Услуга','Дизайн + Надзор'], en:['Service','Design + Supervision'] },
+        ],
+        tags: ['Минимализм','Камень','Авторская мебель','Открытая планировка'],
+    },
+    {
+        cat:    { ru:'Интерьер', en:'Interior' },
+        title:  { ru:'Загородный дом — 280 м²', en:'Country House — 280 m²' },
+        desc:   { ru:'Тёплый скандинавский стиль с элементами japandi — дерево, лён, натуральный свет. Большие панорамные окна, камин, материалы премиум-класса. Создан ощущение уюта и связи с природой.', en:'Warm Scandinavian style with japandi elements — wood, linen, natural light. Large panoramic windows, fireplace and premium materials create a sense of cosiness and connection with nature.' },
+        images: ['images/1.png','images/5.jpg','images/proj2_3.jpg'],
+        meta: [
+            { ru:['Локация','Минский р-н'], en:['Location','Minsk region'] },
+            { ru:['Площадь','280 м²'], en:['Area','280 m²'] },
+            { ru:['Тип','Загородный дом'], en:['Type','Country house'] },
+            { ru:['Стиль','Japandi'], en:['Style','Japandi'] },
+            { ru:['Год','2023'], en:['Year','2023'] },
+            { ru:['Услуга','Полный проект'], en:['Service','Full project'] },
+        ],
+        tags: ['Japandi','Дерево','Панорамные окна','Камин'],
+    },
+    {
+        cat:    { ru:'Интерьер · Premium', en:'Interior · Premium' },
+        title:  { ru:'Пентхаус — 340 м²', en:'Penthouse — 340 m²' },
+        desc:   { ru:'Представительский интерьер с панорамными видами на город. Мрамор Calacatta, латунь, велюр. Авторская мебель, индивидуальные осветительные приборы, умный дом. Реализован совместно с командой подрядчиков под постоянным авторским надзором.', en:'Representative interior with panoramic city views. Calacatta marble, brass, velvet. Bespoke furniture, custom lighting, smart home. Delivered in partnership with contractors under full construction supervision.' },
+        images: ['images/proj3_1.jpg','images/proj3_2.jpg','images/proj3_3.jpg','images/proj3_4.jpg','images/proj3_5.jpg'],
+        meta: [
+            { ru:['Локация','Минск, центр'], en:['Location','Minsk, city centre'] },
+            { ru:['Площадь','340 м²'], en:['Area','340 m²'] },
+            { ru:['Тип','Пентхаус'], en:['Type','Penthouse'] },
+            { ru:['Стиль','Contemporary Luxury'], en:['Style','Contemporary Luxury'] },
+            { ru:['Год','2024'], en:['Year','2024'] },
+            { ru:['Услуга','Дизайн + Мебель + Надзор'], en:['Service','Design + Furniture + Supervision'] },
+        ],
+        tags: ['Luxury','Мрамор','Латунь','Умный дом','Авторский надзор'],
+    },
+    {
+        cat:    { ru:'Архитектура', en:'Architecture' },
+        title:  { ru:'Частный дом — концепция фасада', en:'Private House — Façade Concept' },
+        desc:   { ru:'Современный минималистичный фасад из клинкерного кирпича антрацит и тёмного металлического профиля. Горизонтальные линии, акцентные вставки из дерева, скрытые водостоки. Проект включал рабочую документацию и авторский надзор за фасадными работами.', en:'Contemporary minimalist façade in anthracite clinker brick and dark metal profiling. Horizontal lines, timber accents and concealed gutters. The project included working drawings and construction supervision.' },
+        images: ['images/proj4_1.jpg','images/proj4_2.jpg','images/proj4_3.jpg'],
+        meta: [
+            { ru:['Локация','Минский р-н'], en:['Location','Minsk region'] },
+            { ru:['Площадь','420 м²'], en:['Area','420 m²'] },
+            { ru:['Тип','Частный дом'], en:['Type','Private house'] },
+            { ru:['Стиль','Минимализм'], en:['Style','Minimalism'] },
+            { ru:['Год','2023'], en:['Year','2023'] },
+            { ru:['Услуга','Фасад + Надзор'], en:['Service','Façade + Supervision'] },
+        ],
+        tags: ['Клинкер','Металл','Минимализм','Фасад'],
+    },
+    {
+        cat:    { ru:'Архитектура + Надзор', en:'Architecture + Supervision' },
+        title:  { ru:'Вилла на озере — авторский надзор', en:'Lakeside Villa — Construction Supervision' },
+        desc:   { ru:'Полный цикл реализации: от архитектурной концепции до финальной приёмки. Стекло, бетон и дерево — органичная связь с ландшафтом. Регулярные выезды на объект, координация 12 подрядчиков, отчётность заказчику.', en:'Full delivery cycle from architectural concept to final handover. Glass, concrete and timber harmonised with the landscape. Regular site visits, coordination of 12 contractors and client reporting throughout.' },
+        images: ['images/3.png','images/proj5_2.jpg','images/proj5_3.jpg','images/proj5_4.jpg'],
+        meta: [
+            { ru:['Локация','Нарочь'], en:['Location','Naroch'] },
+            { ru:['Площадь','560 м²'], en:['Area','560 m²'] },
+            { ru:['Тип','Вилла'], en:['Type','Villa'] },
+            { ru:['Стиль','Органическая архитектура'], en:['Style','Organic Architecture'] },
+            { ru:['Год','2024'], en:['Year','2024'] },
+            { ru:['Услуга','Архитектура + Полный надзор'], en:['Service','Architecture + Full Supervision'] },
+        ],
+        tags: ['Стекло','Бетон','Дерево','Ландшафт','Авторский надзор'],
+    },
+    {
+        cat:    { ru:'Коммерческий', en:'Commercial' },
+        title:  { ru:'Ресторан fine dining — Минск', en:'Fine Dining Restaurant — Minsk' },
+        desc:   { ru:'Камерная атмосфера премиального ресторана. Тёмная палитра, латунные детали, текстуры вельвета и выдержанного дуба. Продуманная акустика и световые сценарии для разных форматов вечера. Разработка дизайна, подбор мебели и декора, авторский надзор за отделочными работами.', en:'Intimate atmosphere of a premium restaurant. Dark palette, brass details, velvet and aged oak textures. Acoustic design and lighting scenes for different evening formats. Design, furniture selection, décor and construction supervision.' },
+        images: ['images/proj6_1.jpg','images/proj6_2.jpg','images/proj6_3.jpg'],
+        meta: [
+            { ru:['Локация','Минск'], en:['Location','Minsk'] },
+            { ru:['Площадь','240 м²'], en:['Area','240 m²'] },
+            { ru:['Тип','Ресторан'], en:['Type','Restaurant'] },
+            { ru:['Стиль','Dark Luxury'], en:['Style','Dark Luxury'] },
+            { ru:['Год','2023'], en:['Year','2023'] },
+            { ru:['Услуга','Дизайн + Мебель + Надзор'], en:['Service','Design + Furniture + Supervision'] },
+        ],
+        tags: ['Ресторан','Латунь','Акустика','Световые сценарии'],
+    },
+    {
+        cat:    { ru:'Офисный', en:'Office' },
+        title:  { ru:'IT-офис — 1 200 м²', en:'IT Office — 1,200 m²' },
+        desc:   { ru:'Гибкое зонирование для IT-компании: open space, переговорные разного формата, зоны отдыха, кухня. Корпоративный брендинг интегрирован в интерьер. Акустические решения, эргономичная мебель, умное управление освещением.', en:'Flexible zoning for an IT company: open space, meeting rooms of various formats, relaxation areas, kitchen. Corporate branding integrated into the interior. Acoustic solutions, ergonomic furniture, smart lighting control.' },
+        images: ['images/proj7_1.jpg','images/proj7_2.jpg','images/proj7_3.jpg'],
+        meta: [
+            { ru:['Локация','Минск'], en:['Location','Minsk'] },
+            { ru:['Площадь','1 200 м²'], en:['Area','1,200 m²'] },
+            { ru:['Тип','Офис'], en:['Type','Office'] },
+            { ru:['Стиль','Tech Modern'], en:['Style','Tech Modern'] },
+            { ru:['Год','2024'], en:['Year','2024'] },
+            { ru:['Услуга','Дизайн + Надзор'], en:['Service','Design + Supervision'] },
+        ],
+        tags: ['Офис','Open Space','Акустика','Брендинг'],
+    },
+    {
+        cat:    { ru:'Гостиничный', en:'Hospitality' },
+        title:  { ru:'Бутик-отель — 32 номера', en:'Boutique Hotel — 32 Rooms' },
+        desc:   { ru:'Авторская концепция интерьеров бутик-отеля: лобби, ресторан, 32 номера трёх категорий, SPA-зона. Единая концепция бренда в каждом пространстве. Полный авторский надзор — от нулевого цикла до передачи ключей.', en:'Bespoke interior concept for a boutique hotel: lobby, restaurant, 32 rooms across three categories and a spa. A unified brand identity across every space. Full construction supervision from groundworks to key handover.' },
+        images: ['images/proj8_1.jpg','images/proj8_2.jpg','images/proj8_3.jpg','images/proj8_4.jpg'],
+        meta: [
+            { ru:['Локация','Минск'], en:['Location','Minsk'] },
+            { ru:['Площадь','2 800 м²'], en:['Area','2,800 m²'] },
+            { ru:['Тип','Отель'], en:['Type','Hotel'] },
+            { ru:['Стиль','Contemporary Classic'], en:['Style','Contemporary Classic'] },
+            { ru:['Год','2024'], en:['Year','2024'] },
+            { ru:['Услуга','Концепция + Надзор'], en:['Service','Concept + Supervision'] },
+        ],
+        tags: ['Отель','Бренд','SPA','Полный надзор'],
+    },
+];
+
+/* ════ GALLERY STATE ════ */
+let galIdx = 0;
+let galTotal = 0;
+
+function openProject(idx) {
+    const p = PROJECTS[idx];
+    const l = lang;
+
+    /* fill gallery */
+    galIdx = 0; galTotal = p.images.length;
+    const track = document.getElementById('galleryTrack');
+    const strip = document.getElementById('thumbStrip');
+    track.innerHTML = '';
+    strip.innerHTML = '';
+    p.images.forEach((src, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'gallery-slide';
+        slide.innerHTML = `<img src="${src}" alt=""><div class="gallery-overlay"></div>`;
+        track.appendChild(slide);
+
+        const th = document.createElement('div');
+        th.className = 'thumb-item' + (i===0?' active':'');
+        th.innerHTML = `<img src="${src}" alt="">`;
+        th.onclick = () => goSlide(i);
+        strip.appendChild(th);
+    });
+    updateGallery();
+
+    /* fill info */
+    document.getElementById('mCat').textContent   = p.cat[l];
+    document.getElementById('mTitle').textContent  = p.title[l];
+    document.getElementById('mDesc').textContent   = p.desc[l];
+
+    const tags = document.getElementById('mTags');
+    tags.innerHTML = p.tags.map(t=>`<span class="proj-tag">${t}</span>`).join('');
+
+    const meta = document.getElementById('mMeta');
+    meta.innerHTML = p.meta.map(m=>
+        `<div class="proj-meta-row">
+            <span class="proj-meta-key">${m[l][0]}</span>
+            <span class="proj-meta-val">${m[l][1]}</span>
+        </div>`
+    ).join('');
+
+    /* open */
+    const ov = document.getElementById('projOverlay');
+    ov.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeProject() {
+    document.getElementById('projOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function handleOverlayClick(e) {
+    if (e.target === document.getElementById('projOverlay')) closeProject();
+}
+
+function goSlide(i) {
+    galIdx = i;
+    updateGallery();
+}
+
+function galleryPrev() { galIdx = (galIdx - 1 + galTotal) % galTotal; updateGallery(); }
+function galleryNext() { galIdx = (galIdx + 1) % galTotal; updateGallery(); }
+
+function updateGallery() {
+    document.getElementById('galleryTrack').style.transform = `translateX(-${galIdx*100}%)`;
+    document.getElementById('galleryCounter').textContent = `${galIdx+1} / ${galTotal}`;
+    document.querySelectorAll('.thumb-item').forEach((t,i)=>
+        t.classList.toggle('active', i===galIdx));
+}
+
+/* keyboard nav inside modal */
+document.addEventListener('keydown', e => {
+    const ov = document.getElementById('projOverlay');
+    if (ov.classList.contains('open')) {
+        if (e.key==='ArrowRight') galleryNext();
+        if (e.key==='ArrowLeft')  galleryPrev();
+        if (e.key==='Escape') closeProject();
+    } else {
+        if (e.key==='Escape') closePrivacy();
+    }
+});
+
+/* ════ FILTER ════ */
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const cat = btn.dataset.cat;
+        document.querySelectorAll('.project-card').forEach(card => {
+            const show = cat==='all' || card.dataset.cat===cat;
+            card.style.display = show ? '' : 'none';
+        });
+    });
+});
+
+/* ════ NAVBAR ════ */
+function toggleMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const burger = document.getElementById('burger');
+    const open = menu.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+}
+document.querySelectorAll('.mobile-menu a').forEach(a => {
+    a.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.remove('open');
+        document.getElementById('burger').classList.remove('open');
+        document.body.style.overflow = '';
+    });
+});
+function toggleContacts() { document.getElementById('contactMenu').classList.toggle('active'); }
+document.addEventListener('click', e => {
+    const d = document.querySelector('.contact-dropdown');
+    if (d && !d.contains(e.target)) document.getElementById('contactMenu').classList.remove('active');
+});
+function toggleMobileContacts() { document.getElementById('mobileContactMenu').classList.toggle('active'); }
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ════ i18n ════ */
+const T = {
+    ru: {
+        nav1:'Главная', nav2:'Интерьеры', nav3:'Архитектура', nav4:'Услуги', nav5m:'Портфолио',
+        navCta:'Написать нам', heroLabel:'MUKAAB',
+        title:'Портфолио',
+        subtitle:'Реализованные проекты в области интерьерного дизайна, архитектуры и авторского надзора.',
+        filterLabel:'Категория',
+        catAll:'Все работы', catInt:'Интерьер', catArch:'Архитектура',
+        catFurniture:'Мебель', catComm:'Коммерческие',
+        secInt:'Интерьерный дизайн', secArch:'Архитектура и фасады', secComm:'Коммерческие объекты',
+        openBtn:'Открыть проект',
+        p0title:'Апартаменты в Минске — 120 м²',
+        p0short:'Минималистичный интерьер в нейтральной палитре с акцентом на фактуры натурального камня и дерева.',
+        p1title:'Загородный дом — 280 м²',
+        p1short:'Тёплый скандинавский стиль с элементами japandi — дерево, лён, натуральный свет.',
+        p2title:'Пентхаус — 340 м²',
+        p2short:'Представительский интерьер с панорамными видами. Мрамор, латунь, велюр, авторская мебель.',
+        p3title:'Частный дом — концепция фасада',
+        p3short:'Современный минималистичный фасад из клинкерного кирпича и тёмного металла.',
+        p4title:'Вилла на озере — авторский надзор',
+        p4short:'Полный цикл от проекта до сдачи. Стекло, бетон, дерево — органичная связь с ландшафтом.',
+        p5title:'Ресторан fine dining — Минск',
+        p5short:'Камерная атмосфера, тёмная палитра, латунь и вельвет. Акустическое зонирование.',
+        p6title:'IT-офис — 1 200 м²',
+        p6short:'Гибкое зонирование, акустика, зоны отдыха и переговорных. Корпоративный брендинг в интерьере.',
+        p7title:'Бутик-отель — 32 номера',
+        p7short:'Авторская концепция интерьеров: лобби, ресторан, номера. Полный авторский надзор.',
+        ctah:'Обсудим ваш проект?',
+        ctap:'Расскажите о задаче — ответим в течение часа',
+        ctabtn:'Связаться с нами',
+        footsub:'Premium Design Studio',
+        privacyLink:'Политика конфиденциальности',
+        pmLabel:'Документ', pmTitle:'Политика конфиденциальности',
+    },
+    en: {
+        nav1:'Home', nav2:'Interiors', nav3:'Architecture', nav4:'Services', nav5m:'Portfolio',
+        navCta:'Contact Us', heroLabel:'MUKAAB',
+        title:'Portfolio',
+        subtitle:'Completed projects in interior design, architecture and construction supervision.',
+        filterLabel:'Category',
+        catAll:'All works', catInt:'Interior', catArch:'Architecture',
+        catFurniture:'Furniture', catComm:'Commercial',
+        secInt:'Interior Design', secArch:'Architecture & Façades', secComm:'Commercial Projects',
+        openBtn:'Open project',
+        p0title:'Minsk Apartment — 120 m²',
+        p0short:'Minimalist interior in a neutral palette with an emphasis on natural stone and wood textures.',
+        p1title:'Country House — 280 m²',
+        p1short:'Warm Scandinavian style with japandi elements — wood, linen, natural light.',
+        p2title:'Penthouse — 340 m²',
+        p2short:'Representative interior with panoramic views. Marble, brass, velvet, bespoke furniture.',
+        p3title:'Private House — Façade Concept',
+        p3short:'Contemporary minimalist façade in anthracite clinker brick and dark metal.',
+        p4title:'Lakeside Villa — Construction Supervision',
+        p4short:'Full cycle from concept to handover. Glass, concrete and timber in harmony with the landscape.',
+        p5title:'Fine Dining Restaurant — Minsk',
+        p5short:'Intimate atmosphere, dark palette, brass and velvet. Acoustic zoning.',
+        p6title:'IT Office — 1,200 m²',
+        p6short:'Flexible zoning, acoustics, lounge and meeting areas. Corporate branding in the interior.',
+        p7title:'Boutique Hotel — 32 Rooms',
+        p7short:'Bespoke interior concept: lobby, restaurant, rooms. Full construction supervision.',
+        ctah:'Shall we discuss your project?',
+        ctap:"Tell us about your task — we'll respond within the hour",
+        ctabtn:'Contact us',
+        footsub:'Premium Design Studio',
+        privacyLink:'Privacy Policy',
+        pmLabel:'Document', pmTitle:'Privacy Policy',
+    }
+};
+
+let lang = 'ru';
+
+function setLang(l) {
+    lang = l;
+    document.getElementById('btn-ru').classList.toggle('active', l==='ru');
+    document.getElementById('btn-en').classList.toggle('active', l==='en');
+    document.getElementById('mob-btn-ru').classList.toggle('active', l==='ru');
+    document.getElementById('mob-btn-en').classList.toggle('active', l==='en');
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const k = el.getAttribute('data-i18n');
+        if (T[l][k] !== undefined) el.innerHTML = T[l][k];
+    });
+    localStorage.setItem('lang', l);
+}
+
+/* ════ PRIVACY ════ */
+const privBody = {
+    ru:`<style>
+#privBody h2{font-size:15px;font-weight:700;color:#fff;margin:26px 0 10px;padding-left:14px;border-left:2px solid #c8a96e;}
+#privBody h2:first-child{margin-top:0;}
+#privBody p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.85;margin-bottom:10px;}
+#privBody ul{margin:8px 0 14px;list-style:none;}
+#privBody ul li{font-size:13px;color:rgba(255,255,255,.62);padding:6px 0 6px 18px;position:relative;border-bottom:1px solid rgba(255,255,255,.04);line-height:1.6;}
+#privBody ul li:last-child{border-bottom:none;}
+#privBody ul li::before{content:'—';position:absolute;left:0;color:#c8a96e;font-size:11px;top:8px;}
+#privBody strong{color:#fff;font-weight:600;}
+#privBody .pm-contacts{padding:20px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);margin:18px 0 10px;}
+#privBody .pm-footer{margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12px;color:rgba(255,255,255,.35);}
+#privBody .pm-badge{background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.2);color:#c8a96e;padding:4px 14px;font-size:11px;font-weight:600;letter-spacing:.06em;}
+</style>
+<p><strong>ООО «Мукааб»</strong> уделяет большое значение защите персональных данных. Настоящая Политика определяет порядок обработки информации, предоставленной посетителями сайта <strong>mukaab.by</strong>.</p>
+<h2>1. Общие положения</h2>
+<p>Политика составлена в соответствии с законодательством Республики Беларусь.</p>
+<h2>2. Данные, которые мы собираем</h2>
+<ul><li>имя и фамилия;</li><li>номер телефона;</li><li>адрес электронной почты;</li><li>иные данные, переданные добровольно.</li></ul>
+<h2>3. Цели обработки</h2>
+<ul><li>обработка заявок;</li><li>предоставление информации об услугах;</li><li>подготовка коммерческих предложений.</li></ul>
+<div class="pm-contacts"><p><strong>Оператор:</strong> ООО «Мукааб»</p><p>Email: privacy@mukaab.by</p><p>г. Минск, ул. Мележа 1, офис 405</p></div>
+<div class="pm-footer"><span class="pm-badge">Действующая редакция</span><span>© ООО «Мукааб»</span></div>`,
+    en:`<style>
+#privBody h2{font-size:15px;font-weight:700;color:#fff;margin:26px 0 10px;padding-left:14px;border-left:2px solid #c8a96e;}
+#privBody h2:first-child{margin-top:0;}
+#privBody p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.85;margin-bottom:10px;}
+#privBody ul{margin:8px 0 14px;list-style:none;}
+#privBody ul li{font-size:13px;color:rgba(255,255,255,.62);padding:6px 0 6px 18px;position:relative;border-bottom:1px solid rgba(255,255,255,.04);line-height:1.6;}
+#privBody ul li:last-child{border-bottom:none;}
+#privBody ul li::before{content:'—';position:absolute;left:0;color:#c8a96e;font-size:11px;top:8px;}
+#privBody strong{color:#fff;font-weight:600;}
+#privBody .pm-contacts{padding:20px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);margin:18px 0 10px;}
+#privBody .pm-footer{margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12px;color:rgba(255,255,255,.35);}
+#privBody .pm-badge{background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.2);color:#c8a96e;padding:4px 14px;font-size:11px;font-weight:600;letter-spacing:.06em;}
+</style>
+<p><strong>Mukaab LLC</strong> places great importance on the protection of users' personal data. This Privacy Policy governs information provided by visitors to <strong>mukaab.by</strong>.</p>
+<h2>1. General Provisions</h2><p>This Policy complies with the legislation of the Republic of Belarus.</p>
+<h2>2. Data We Collect</h2>
+<ul><li>first and last name;</li><li>phone number;</li><li>email address;</li><li>other voluntarily provided data.</li></ul>
+<h2>3. Purposes of Processing</h2>
+<ul><li>handling requests;</li><li>providing service information;</li><li>preparing commercial proposals.</li></ul>
+<div class="pm-contacts"><p><strong>Operator:</strong> Mukaab LLC</p><p>Email: privacy@mukaab.by</p><p>Minsk, Melezh St. 1, office 405</p></div>
+<div class="pm-footer"><span class="pm-badge">Current version</span><span>© Mukaab LLC</span></div>`
+};
+
+function openPrivacy() {
+    document.getElementById('privBody').innerHTML = privBody[lang];
+    document.getElementById('privOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closePrivacy() {
+    document.getElementById('privOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+/* init */
+const saved = localStorage.getItem('lang');
+if (saved) setLang(saved);
+</script>
+</body>
+</html>

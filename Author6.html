@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUKAAB — Авторский надзор</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+    --gold: #ffffff;
+    --blue: rgba(0,81,255,0.40);
+    --blue-h: #2601faaf;
+    --border: rgba(255,255,255,0.07);
+    --muted: rgba(255,255,255,0.55);
+}
+
+body {
+    background: #050505;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+    padding-top: 90px;
+}
+
+img { width:100%; display:block; }
+a { text-decoration:none; color:inherit; }
+
+/* ─── NAVBAR ─── */
+.navbar {
+    position: fixed; top:0; left:0;
+    width:100%; height:90px; padding:0 50px;
+    display:flex; align-items:center; justify-content:space-between;
+    z-index:99999;
+    background:rgba(0,0,0,0.185);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(22,15,15,0.103);
+    transition: background .4s, border-color .4s;
+}
+.navbar.scrolled {
+    background:rgba(5,5,5,0.92);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+}
+
+.nav-left { display:flex; gap:24px; }
+.nav-left a { color:#fff; font-size:14px; font-weight:500; opacity:.7; transition:.3s; }
+.nav-left a:hover { opacity:1; }
+
+.logo { position:absolute; left:50%; transform:translateX(-50%); }
+.logo img { width:140px; height:auto; display:block; object-fit:contain; }
+
+.nav-right { display:flex; align-items:center; gap:18px; flex-shrink:0; margin-right:6px; }
+.nav-right a { color:#fff; font-size:14px; opacity:.7; transition:.3s; }
+.nav-right a:hover { opacity:1; }
+
+.lang-switch { display:flex; gap:10px; }
+.lang-switch button {
+    width:42px; height:42px; border-radius:50%;
+    border:1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.05);
+    color:#fff; cursor:pointer;
+    font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700;
+    transition:.3s;
+}
+.lang-switch button.active { background:#1d4ed8; }
+
+.nav-cta {
+    height:52px; padding:0 24px; border:none; border-radius:999px;
+    background:linear-gradient(135deg,rgba(0,81,255,.95),rgba(37,99,235,.95));
+    color:#fff; font-size:14px; font-weight:700; font-family:'Montserrat',sans-serif;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:.35s; white-space:nowrap;
+    box-shadow:0 12px 35px rgba(37,99,235,.30);
+}
+.nav-cta:hover {
+    transform:translateY(-2px);
+    box-shadow:0 18px 45px rgba(37,99,235,.45);
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+}
+
+.contact-dropdown { position:relative; }
+.contact-menu {
+    position:absolute; top:65px; right:0;
+    width:220px; padding:12px; border-radius:22px;
+    background:rgba(10,10,10,.96); backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.08);
+    display:flex; flex-direction:column; gap:8px;
+    opacity:0; visibility:hidden; transform:translateY(10px);
+    transition:.35s; z-index:999;
+}
+.contact-menu.active { opacity:1; visibility:visible; transform:translateY(0); }
+.contact-menu a {
+    height:50px; border-radius:14px;
+    display:flex; align-items:center; padding:0 18px;
+    background:rgba(255,255,255,.03); color:#fff;
+    font-size:14px; font-weight:600; transition:.3s;
+}
+.contact-menu a:hover { background:rgba(0,81,255,.22); transform:translateX(4px); }
+
+/* ─── BURGER ─── */
+.burger {
+    display:none; flex-direction:column; justify-content:center;
+    align-items:center; gap:5px; width:42px; height:42px;
+    border-radius:50%; border:1px solid rgb(0, 0, 0);
+    background:rgba(0, 0, 0, 0.05); cursor:pointer;
+    z-index:1001; transition:background .3s; flex-shrink:0;
+}
+.burger:hover { background:rgba(26, 24, 24, 0.1); }
+.burger span {
+    display:block; width:18px; height:1.5px;
+    background:#fff; border-radius:2px;
+    transition:transform .35s, opacity .35s; transform-origin:center;
+}
+.burger.open span:nth-child(1) { transform:translateY(6.5px) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
+.burger.open span:nth-child(3) { transform:translateY(-6.5px) rotate(-45deg); }
+
+/* ─── MOBILE MENU ─── */
+.mobile-menu {
+    position:fixed; top:90px; left:0; width:100%;
+    background:rgba(5,5,5,0.98); backdrop-filter:blur(24px);
+    border-bottom:1px solid rgba(255,255,255,0.07);
+    padding:28px 24px 32px;
+    display:flex; flex-direction:column; gap:0;
+    transform:translateY(-110%); opacity:0;
+    transition:transform .4s cubic-bezier(.19,1,.22,1), opacity .35s;
+    z-index:998; pointer-events:none;
+}
+.mobile-menu.open { transform:translateY(0); opacity:1; pointer-events:all; }
+.mobile-menu a {
+    display:block; color:rgba(255,255,255,.72);
+    font-size:15px; font-weight:500; padding:14px 0;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    transition:color .25s; letter-spacing:.02em;
+}
+.mobile-menu a:last-of-type { border-bottom:none; }
+.mobile-menu a:hover { color:#fff; }
+
+.mobile-menu-lang {
+    display:flex; gap:10px; margin-top:22px;
+    padding-top:22px; border-top:1px solid rgba(255,255,255,.07);
+}
+.mobile-menu-lang button {
+    width:46px; height:46px; border-radius:50%;
+    border:1px solid rgba(255,255,255,0.10);
+    background:rgba(255,255,255,0.05); color:#fff;
+    font-size:13px; font-weight:700; font-family:'Montserrat',sans-serif;
+    cursor:pointer; transition:.3s;
+}
+.mobile-menu-lang button:hover,
+.mobile-menu-lang button.active { background:rgba(0,81,255,.42); border-color:rgba(0,81,255,.5); }
+
+.mobile-contact-dropdown { position:relative; margin-top:18px; }
+.mobile-menu-cta {
+    width:100%; height:54px; margin-top:18px; border:none; border-radius:18px;
+    background:linear-gradient(135deg,rgba(0,81,255,.95),rgba(37,99,235,.95));
+    color:#fff; font-size:15px; font-weight:700; font-family:'Montserrat',sans-serif;
+    cursor:pointer; transition:.35s;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 30px rgba(37,99,235,.28);
+}
+.mobile-menu-cta:hover { transform:translateY(-2px); box-shadow:0 18px 40px rgba(37,99,235,.42); }
+.mobile-contact-menu {
+    display:flex; flex-direction:column; gap:8px; margin-top:12px;
+    opacity:0; visibility:hidden; max-height:0; overflow:hidden; transition:.35s ease;
+}
+.mobile-contact-menu.active { opacity:1; visibility:visible; max-height:300px; }
+.mobile-contact-menu a {
+    height:52px; border-radius:16px;
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:14px; font-weight:600; transition:.3s;
+}
+.mobile-contact-menu a:hover { background:rgba(0,81,255,.18); border-color:rgba(0,81,255,.28); }
+
+/* ─── HERO ─── */
+.hero {
+    position:relative; height:62vh; min-height:380px; overflow:hidden;
+}
+.hero-image {
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; filter:brightness(.70); transition:transform 8s ease;
+}
+.hero:hover .hero-image { transform:scale(1.04); }
+.hero-overlay {
+    position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,.97) 0%, rgba(0,0,0,.30) 55%, transparent 100%);
+}
+.hero-content { position:absolute; bottom:52px; left:60px; z-index:2; }
+.hero-label {
+    display:block; font-size:11px; letter-spacing:.38em;
+    text-transform:uppercase; color:var(--gold); font-weight:700; margin-bottom:14px;
+}
+.hero-content h1 {
+    font-size:clamp(40px,6.5vw,80px); font-weight:800;
+    letter-spacing:-.03em; line-height:1.05; margin-bottom:16px;
+}
+.hero-content p { font-size:15px; color:rgba(255,255,255,.60); max-width:520px; line-height:1.7; }
+
+/* ─── SERVICES PANEL ─── */
+.services-panel {
+    max-width:1320px; margin:0 auto;
+    padding:72px 40px 100px;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+}
+
+.panel-section-label {
+    grid-column:1/-1; display:flex; align-items:center;
+    gap:20px; margin-top:14px; margin-bottom:4px;
+}
+.panel-section-label span {
+    font-size:10px; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--gold); font-weight:700; white-space:nowrap;
+}
+.panel-section-label::after {
+    content:''; flex:1; height:1px; background:rgba(255,255,255,.07);
+}
+
+/* ─── GLASS CARD ─── */
+.service-box {
+    padding:30px 28px;
+    border:1px solid rgba(255,255,255,0.07);
+    background:rgba(255,255,255,0.025);
+    backdrop-filter:blur(14px);
+    transition:border-color .4s, background .4s;
+    display:flex; flex-direction:column; gap:16px;
+}
+.service-box:hover { border-color:rgba(0,81,255,.30); background:rgba(0,81,255,.04); }
+.service-box.featured { border-color:rgba(200,169,110,.28); background:rgba(200,169,110,.03); }
+.service-box.featured:hover { border-color:rgba(200,169,110,.55); background:rgba(200,169,110,.07); }
+.service-box.wide { grid-column:span 2; }
+.service-box.full { grid-column:1/-1; }
+
+.service-top { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+.service-top h2 { font-size:18px; font-weight:700; line-height:1.25; letter-spacing:-.01em; }
+
+.price { font-size:22px; font-weight:800; letter-spacing:-.02em; color:#fff; white-space:nowrap; line-height:1; }
+.price-sub { font-size:12px; color:var(--muted); font-weight:500; margin-top:2px; white-space:nowrap; }
+.price-block { text-align:right; flex-shrink:0; }
+
+.service-box ul { list-style:none; display:flex; flex-direction:column; gap:0; }
+.service-box ul li {
+    font-size:13px; color:rgba(255,255,255,.62);
+    padding:8px 0 8px 18px; position:relative;
+    border-bottom:1px solid rgba(255,255,255,.04); line-height:1.5;
+}
+.service-box ul li:last-child { border-bottom:none; }
+.service-box ul li::before {
+    content:'—'; position:absolute; left:0;
+    color:var(--gold); font-size:11px; top:10px;
+}
+
+.service-description p { font-size:13px; color:var(--muted); line-height:1.75; }
+
+.service-text .row {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:9px 0; border-bottom:1px solid rgba(255,255,255,.04);
+    font-size:13px; color:rgba(255,255,255,.65);
+}
+.service-text .row:last-child { border-bottom:none; }
+.service-text .row .row-val {
+    font-weight:700; color:#fff; font-size:13px;
+    white-space:nowrap; padding-left:16px; flex-shrink:0;
+}
+
+.premium-note {
+    display:inline-block; padding:8px 16px;
+    background:rgba(200,169,110,.10); border:1px solid rgba(200,169,110,.22);
+    color:var(--gold); font-size:12px; font-weight:600;
+    letter-spacing:.04em; margin-top:4px; align-self:flex-start;
+}
+
+/* result block */
+.result-block {
+    padding:22px 24px;
+    border:1px solid rgba(200,169,110,.18);
+    background:rgba(200,169,110,.04);
+    display:flex; gap:18px; align-items:flex-start;
+}
+.result-icon {
+    font-size:28px; line-height:1; flex-shrink:0; margin-top:2px;
+}
+.result-block p { font-size:13px; color:rgba(255,255,255,.70); line-height:1.8; }
+.result-block strong { color:var(--gold); font-weight:700; }
+
+/* step numbers */
+.step-num {
+    width:28px; height:28px; border-radius:50%;
+    border:1px solid rgba(200,169,110,.30);
+    background:rgba(200,169,110,.06);
+    color:var(--gold); font-size:11px; font-weight:800;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; letter-spacing:.04em;
+}
+
+.two-col-list { display:grid; grid-template-columns:1fr 1fr; gap:0; }
+
+/* ─── CTA ─── */
+.cta-row {
+    grid-column:1/-1;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:24px; padding:40px 44px;
+    border:1px solid rgba(255,255,255,.07);
+    background:rgba(255,255,255,.02);
+    flex-wrap:wrap; margin-top:8px;
+}
+.cta-row h3 { font-size:clamp(20px,2.8vw,30px); font-weight:800; letter-spacing:-.02em; margin-bottom:8px; }
+.cta-row p { font-size:14px; color:var(--muted); }
+.cta-btn {
+    height:52px; padding:0 34px; border-radius:50px;
+    background:var(--blue); border:1px solid rgba(255,255,255,.20);
+    color:#fff; font-size:15px; font-family:'Montserrat',sans-serif;
+    font-weight:700; cursor:pointer; transition:.4s;
+    white-space:nowrap; letter-spacing:.04em;
+}
+.cta-btn:hover { background:var(--blue-h); }
+
+/* ─── FOOTER ─── */
+.footer {
+    padding:36px 40px; border-top:1px solid rgba(255,255,255,.07);
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:13px; color:var(--muted); flex-wrap:wrap; gap:12px;
+}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1020px){
+    .services-panel { grid-template-columns:1fr 1fr; padding:50px 24px 80px; }
+    .service-box.wide { grid-column:span 2; }
+}
+@media(max-width:1000px){
+    .navbar { display:flex; justify-content:space-between; padding:0 20px; }
+    .nav-left { display:none; }
+    .nav-right { display:none; }
+    .burger { display:flex; }
+    .logo { margin:0 auto; }
+}
+@media(max-width:680px){
+    .services-panel { grid-template-columns:1fr; padding:40px 16px 70px; }
+    .service-box.wide { grid-column:span 1; }
+    .two-col-list { grid-template-columns:1fr; }
+    .hero-content { left:24px; bottom:36px; }
+    .cta-row { padding:28px 24px; flex-direction:column; align-items:flex-start; }
+    .footer { flex-direction:column; align-items:flex-start; padding:28px 20px; }
+    .panel-section-label { grid-column:1; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<header class="navbar" id="navbar">
+    <div class="nav-left">
+        <a href="mukaab.html" data-i18n="nav1">Главная</a>
+        <a href="interior-design1.html" data-i18n="nav2">Интерьеры</a>
+        <a href="Architecture service2.html" data-i18n="nav3">Архитектура</a>
+    </div>
+
+    <a class="logo" href="mukaab.html">
+        <img src="images/LOGO-2.png" alt="MUKAAB">
+    </a>
+
+    <div class="nav-right">
+        <a href="services.html" data-i18n="nav4">Услуги</a>
+        <a href="#" data-i18n="nav5m">Портфолио</a>
+        <div class="lang-switch">
+            <button onclick="setLang('ru')" id="btn-ru" class="active">RU</button>
+            <button onclick="setLang('en')" id="btn-en">EN</button>
+        </div>
+        <div class="contact-dropdown">
+            <button class="nav-cta" onclick="toggleContacts()" data-i18n="navCta">Написать нам</button>
+            <div class="contact-menu" id="contactMenu">
+                <a href="https://t.me/mukaab_company" target="_blank">Telegram</a>
+                <a href="https://wa.me/375339161111" target="_blank">WhatsApp</a>
+                <a href="mailto:mukaabcompany@gmail.com" data-i18n="navCta">Написать нам</a>
+            </div>
+        </div>
+    </div>
+
+    <button class="burger" id="burger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+</header>
+
+<!-- ── MOBILE MENU ── -->
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="mukaab.html" data-i18n="nav1">Главная</a>
+    <a href="interior-design1.html" data-i18n="nav2">Интерьеры</a>
+    <a href="Architecture service2.html" data-i18n="nav3">Архитектура</a>
+    <a href="services.html" data-i18n="nav4">Услуги</a>
+    <a href="#" data-i18n="nav5m">Портфолио</a>
+    <div class="mobile-menu-lang">
+        <button onclick="setLang('ru')" id="mob-btn-ru" class="active">RU</button>
+        <button onclick="setLang('en')" id="mob-btn-en">EN</button>
+    </div>
+    <div class="mobile-contact-dropdown">
+        <button class="mobile-menu-cta" onclick="toggleMobileContacts()" data-i18n="navCta">Написать нам</button>
+        <div class="mobile-contact-menu" id="mobileContactMenu">
+            <a href="https://t.me/mukaab_company" target="_blank">Telegram</a>
+            <a href="https://wa.me/375339161111" target="_blank">WhatsApp</a>
+            <a href="mailto:mukaabcompany@gmail.com" data-i18n="navCta">Написать нам</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+    <img src="images/61.png" class="hero-image" alt=" ">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <span class="hero-label" data-i18n="heroLabel">Услуги</span>
+        <h1 data-i18n="title">Авторский надзор</h1>
+        <p data-i18n="subtitle">Профессиональное сопровождение проекта на всех этапах реализации — от первого выезда до финальной приёмки.</p>
+    </div>
+</section>
+
+<!-- ── PANEL ── -->
+<section class="services-panel">
+
+    <!-- ═══ КОНТРОЛЬ ═══ -->
+    <div class="panel-section-label">
+        <span data-i18n="sec1">Контроль и соответствие</span>
+    </div>
+
+    <!-- Выезды и проверки -->
+    <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="s1h">Выезды на объект</h2>
+    
+            <div class="price-block">
+                <div class="price">20$</div>
+                <div class="price-sub" data-i18n="pervisit">/ выезд</div>
+            </div>
+        </div>
+    
+        <ul>
+            <li data-i18n="s1a">Регулярные плановые визиты</li>
+            <li data-i18n="s1b">Контроль соответствия работ проекту</li>
+            <li data-i18n="s1c">Проверка качества выполнения</li>
+            <li data-i18n="s1d">Контроль применения материалов</li>
+        </ul>
+    </div>
+
+    <!-- Документация -->
+     <!-- Документация -->
+     <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="s2h">Рабочая документация</h2>
+            <div class="price-block">
+                <div class="price" data-i18n="s2price">от 50$</div>
+                <div class="price-sub" data-i18n="s2unit">/ корректировка</div>
+            </div>
+        </div>
+        <ul>
+            <li data-i18n="s2a">Внесение корректировок по факту</li>
+            <li data-i18n="s2b">Оперативное решение проектных вопросов</li>
+            <li data-i18n="s2c">Согласование изменений с заказчиком</li>
+            <li data-i18n="s2d">Актуализация чертежей и спецификаций</li>
+        </ul>
+    </div>
+ 
+   <!-- Полный пакет — wide featured -->
+   <div class="service-box wide featured">
+    <div class="service-top">
+        <h2 data-i18n="s3h">Полное сопровождение объекта</h2>
+        <div class="price-block">
+            <div class="price" data-i18n="s3price">По запросу</div>
+            <div class="price-sub" data-i18n="s3unit">/ весь объект</div>
+        </div>
+    </div>
+    <div class="service-description">
+        <p data-i18n="s3desc">Комплексный авторский надзор от начала строительства до финальной сдачи объекта:</p>
+    </div>
+    <ul class="two-col-list">
+        <li data-i18n="s3a">Регулярные выезды на объект</li>
+        <li data-i18n="s3b">Контроль всех строительных работ</li>
+        <li data-i18n="s3c">Консультации подрядчиков и строителей</li>
+        <li data-i18n="s3d">Координация смежных специалистов</li>
+        <li data-i18n="s3e">Фото- и видеоотчёты о ходе работ</li>
+        <li data-i18n="s3f">Участие в приёмке выполненных работ</li>
+        <li data-i18n="s3g">Контроль сроков выполнения работ</li>
+        <li data-i18n="s3h2">Сопровождение до завершения строительства</li>
+    </ul>
+    <div class="premium-note" data-i18n="s3note">Стоимость рассчитывается индивидуально по ТЗ</div>
+</div>
+
+<!-- ═══ ТАРИФЫ ═══ -->
+<div class="panel-section-label">
+    <span data-i18n="sec_price">Тарифы</span>
+</div>
+
+<!-- Разовый выезд -->
+<div class="service-box">
+    <div class="service-top">
+        <h2 data-i18n="p1h">Разовый выезд</h2>
+        <div class="price-block">
+            <div class="price" data-i18n="p1price">80$</div>
+            <div class="price-sub" data-i18n="p1unit">/ визит</div>
+        </div>
+    </div>
+    <div class="service-text">
+        <div class="row"><span data-i18n="p1a">Один выезд на объект по запросу</span></div>
+        <div class="row"><span data-i18n="p1b">Осмотр и фиксация замечаний</span></div>
+        <div class="row"><span data-i18n="p1c">Письменный отчёт заказчику</span></div>
+    </div>
+</div>
+
+<!-- Пакет выездов -->
+<div class="service-box">
+    <div class="service-top">
+        <h2 data-i18n="p2h">Пакет выездов</h2>
+        <div class="price-block">
+            <div class="price" data-i18n="p2price">350$</div>
+            <div class="price-sub" data-i18n="p2unit">/ 5 визитов</div>
+        </div>
+    </div>
+    <div class="service-text">
+        <div class="row"><span data-i18n="p2a">5 плановых выездов на объект</span></div>
+        <div class="row"><span data-i18n="p2b">Контроль по согласованному графику</span></div>
+        <div class="row"><span data-i18n="p2c">Фотоотчёт после каждого выезда</span></div>
+        <div class="row"><span data-i18n="p2d">Экономия 12% vs разовых визитов</span></div>
+    </div>
+</div>
+
+<!-- Ежемесячный -->
+<div class="service-box featured">
+    <div class="service-top">
+        <h2 data-i18n="p3h">Ежемесячный надзор</h2>
+        <div class="price-block">
+            <div class="price" data-i18n="p3price">600$</div>
+            <div class="price-sub" data-i18n="p3unit">/ месяц</div>
+        </div>
+    </div>
+    <div class="service-text">
+        <div class="row"><span data-i18n="p3a">Неограниченные выезды в течение месяца</span></div>
+        <div class="row"><span data-i18n="p3b">Приоритетный ответ в течение 2 часов</span></div>
+        <div class="row"><span data-i18n="p3c">Корректировки документации включены</span></div>
+        <div class="row"><span data-i18n="p3d">Координация подрядчиков</span></div>
+    </div>
+    <div class="premium-note" data-i18n="p3note">Оптимально для активной стройки</div>
+</div>
+    <!-- ═══ ЭТАПЫ ═══ -->
+    <div class="panel-section-label">
+        <span data-i18n="sec2">Этапы работы</span>
+    </div>
+
+    <!-- Этапы — full -->
+    <div class="service-box full">
+        <div class="service-top">
+            <h2 data-i18n="steps_h">Как проходит авторский надзор</h2>
+        </div>
+        <div class="service-text">
+            <div class="row">
+                <span data-i18n="step1">Знакомство с проектом и подрядчиками</span>
+                <span class="row-val">01</span>
+            </div>
+            <div class="row">
+                <span data-i18n="step2">Составление графика выездов на объект</span>
+                <span class="row-val">02</span>
+            </div>
+            <div class="row">
+                <span data-i18n="step3">Регулярный контроль хода строительства</span>
+                <span class="row-val">03</span>
+            </div>
+            <div class="row">
+                <span data-i18n="step4">Фиксация замечаний и внесение корректировок</span>
+                <span class="row-val">04</span>
+            </div>
+            <div class="row">
+                <span data-i18n="step5">Координация и решение проектных вопросов</span>
+                <span class="row-val">05</span>
+            </div>
+            <div class="row">
+                <span data-i18n="step6">Финальная приёмка и закрытие объекта</span>
+                <span class="row-val">06</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ ОБЪЕКТЫ И РЕЗУЛЬТАТ ═══ -->
+    <div class="panel-section-label">
+        <span data-i18n="sec3">Где применяется</span>
+    </div>
+
+    <!-- Объекты -->
+    <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="obj_h">Типы объектов</h2>
+        </div>
+        <div class="service-text">
+            <div class="row"><span data-i18n="obj1">Частные дома и виллы</span></div>
+            <div class="row"><span data-i18n="obj2">Квартиры и апартаменты</span></div>
+            <div class="row"><span data-i18n="obj3">Коммерческие объекты</span></div>
+            <div class="row"><span data-i18n="obj4">Рестораны и кафе</span></div>
+            <div class="row"><span data-i18n="obj5">Офисные помещения</span></div>
+            <div class="row"><span data-i18n="obj6">Гостиничные комплексы</span></div>
+        </div>
+    </div>
+
+    <!-- Отчётность -->
+    <div class="service-box">
+        <div class="service-top">
+            <h2 data-i18n="rep_h">Отчётность заказчику</h2>
+        </div>
+        <ul>
+            <li data-i18n="rep1">Фотофиксация каждого выезда</li>
+            <li data-i18n="rep2">Видеоотчёты о ходе строительства</li>
+            <li data-i18n="rep3">Письменные замечания подрядчикам</li>
+            <li data-i18n="rep4">Сводные акты по итогам проверок</li>
+        </ul>
+        <div class="premium-note" data-i18n="rep_note">Прозрачность на каждом этапе</div>
+    </div>
+
+    <!-- Результат — full -->
+    <div class="service-box full featured">
+        <div class="service-top">
+            <h2 data-i18n="res_h">Результат</h2>
+        </div>
+        <div class="result-block">
+            <div class="result-icon">✦</div>
+            <p data-i18n="res_text">Гарантия того, что реализованный объект будет полностью соответствовать <strong>архитектурной концепции</strong>, проектной документации и <strong>стандартам качества</strong>. Вы получаете объект именно таким, каким он был задуман — без отступлений от проекта и скрытых дефектов.</p>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-row">
+        <div>
+            <h3 data-i18n="ctah">Обсудим ваш проект?</h3>
+            <p data-i18n="ctap">Оставьте заявку — свяжемся в течение часа</p>
+        </div>
+        <button class="cta-btn" data-i18n="ctabtn">Оставить заявку</button>
+    </div>
+
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+    <div>© 2026 MUKAAB</div>
+    <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+        <button onclick="openPrivacy()" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:13px;cursor:pointer;font-family:'Montserrat',sans-serif;transition:.3s;padding:0;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.4)'" data-i18n="privacyLink">Политика конфиденциальности</button>
+    </div>
+</footer>
+
+<!-- ── PRIVACY MODAL ── -->
+<div id="privacyOverlay" style="
+    position:fixed;inset:0;z-index:9999;
+    background:rgba(0,0,0,0.55);backdrop-filter:blur(16px);
+    display:flex;justify-content:center;align-items:center;
+    opacity:0;visibility:hidden;transition:.35s ease;
+">
+<div id="privacyModal" style="
+    width:min(860px,94vw);height:min(780px,90vh);
+    background:rgba(8,8,8,0.96);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:4px; overflow:hidden; position:relative;
+    backdrop-filter:blur(30px);
+    box-shadow:0 40px 100px rgba(0,0,0,0.65),inset 0 1px 0 rgba(255,255,255,0.05);
+    transform:translateY(24px) scale(.97);
+    transition:.45s cubic-bezier(.19,1,.22,1);
+    display:flex; flex-direction:column;
+">
+    <div style="padding:32px 40px 26px;border-bottom:1px solid rgba(255,255,255,0.07);background:linear-gradient(to bottom,rgba(255,255,255,.025),transparent);flex-shrink:0;">
+        <div style="font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:#c8a96e;font-weight:700;margin-bottom:12px;" data-i18n="pmLabel">Документ</div>
+        <div style="font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.02em;margin-bottom:6px;" data-i18n="pmTitle">Политика конфиденциальности</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.45);">© ООО «Мукааб» · mukaab.by</div>
+    </div>
+    <div id="pmBody" style="padding:32px 40px 40px;overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;"></div>
+    <button onclick="closePrivacy()" style="position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.25s;font-family:'Montserrat',sans-serif;"
+        onmouseover="this.style.transform='rotate(90deg)';this.style.background='rgba(255,255,255,.1)';this.style.color='#fff'"
+        onmouseout="this.style.transform='rotate(0deg)';this.style.background='rgba(255,255,255,.04)';this.style.color='rgba(255,255,255,.6)'">✕</button>
+</div>
+</div>
+
+<script>
+/* ─── PRIVACY MODAL ─── */
+const PM = {
+    ru: {
+        pmLabel:'Документ', pmTitle:'Политика конфиденциальности', privacyLink:'Политика конфиденциальности',
+        body:`<style>
+#pmBody h2{font-size:15px;font-weight:700;color:#fff;margin:26px 0 10px;padding-left:14px;border-left:2px solid #c8a96e;}
+#pmBody h2:first-child{margin-top:0;}
+#pmBody p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.85;margin-bottom:10px;}
+#pmBody ul{margin:8px 0 14px 0;list-style:none;}
+#pmBody ul li{font-size:13px;color:rgba(255,255,255,.62);padding:6px 0 6px 18px;position:relative;border-bottom:1px solid rgba(255,255,255,.04);line-height:1.6;}
+#pmBody ul li:last-child{border-bottom:none;}
+#pmBody ul li::before{content:'—';position:absolute;left:0;color:#c8a96e;font-size:11px;top:8px;}
+#pmBody strong{color:#fff;font-weight:600;}
+#pmBody .pm-contacts{padding:20px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);margin:18px 0 10px;border-radius:4px;}
+#pmBody .pm-contacts p{margin-bottom:6px;}
+#pmBody .pm-footer{margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:12px;color:rgba(255,255,255,.35);}
+#pmBody .pm-badge{background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.2);color:#c8a96e;padding:4px 14px;font-size:11px;font-weight:600;letter-spacing:.06em;}
+</style>
+<p><strong>ООО «Мукааб»</strong> уделяет большое значение защите персональных данных пользователей. Настоящая Политика конфиденциальности определяет порядок обработки информации, предоставленной посетителями сайта <strong>mukaab.by</strong>.</p>
+<h2>1. Общие положения</h2>
+<p>Политика составлена в соответствии с законодательством Республики Беларусь. Оператор уважает право на неприкосновенность частной жизни и обеспечивает сохранность информации, полученной от посетителей.</p>
+<h2>2. Персональные данные, которые мы собираем</h2>
+<ul>
+<li>имя и фамилия;</li>
+<li>номер телефона;</li>
+<li>адрес электронной почты;</li>
+<li>иные данные, переданные добровольно.</li>
+</ul>
+<h2>3. Цели обработки данных</h2>
+<ul>
+<li>обработка заявок и обратной связи;</li>
+<li>предоставление информации об услугах;</li>
+<li>подготовка коммерческих предложений;</li>
+<li>улучшение работы сайта, анализ пользовательского опыта.</li>
+</ul>
+<div class="pm-contacts">
+<p><strong>Контактные данные Оператора</strong></p>
+<p>ООО «Мукааб»</p>
+<p>Email: <strong>privacy@mukaab.by</strong></p>
+<p>г. Минск, ул. Мележа 1, офис 405</p>
+</div>
+<div class="pm-footer">
+<span class="pm-badge">Действующая редакция</span>
+<span>© ООО «Мукааб», все права защищены</span>
+</div>`
+    },
+    en: {
+        pmLabel:'Document', pmTitle:'Privacy Policy', privacyLink:'Privacy Policy',
+        body:`<style>
+#pmBody h2{font-size:15px;font-weight:700;color:#fff;margin:26px 0 10px;padding-left:14px;border-left:2px solid #c8a96e;}
+#pmBody h2:first-child{margin-top:0;}
+#pmBody p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.85;margin-bottom:10px;}
+#pmBody ul{margin:8px 0 14px 0;list-style:none;}
+#pmBody ul li{font-size:13px;color:rgba(255,255,255,.62);padding:6px 0 6px 18px;position:relative;border-bottom:1px solid rgba(255,255,255,.04);line-height:1.6;}
+#pmBody ul li:last-child{border-bottom:none;}
+#pmBody ul li::before{content:'—';position:absolute;left:0;color:#c8a96e;font-size:11px;top:8px;}
+#pmBody strong{color:#fff;font-weight:600;}
+#pmBody .pm-contacts{padding:20px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);margin:18px 0 10px;border-radius:4px;}
+#pmBody .pm-contacts p{margin-bottom:6px;}
+#pmBody .pm-footer{margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:12px;color:rgba(255,255,255,.35);}
+#pmBody .pm-badge{background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.2);color:#c8a96e;padding:4px 14px;font-size:11px;font-weight:600;letter-spacing:.06em;}
+</style>
+<p><strong>Mukaab LLC</strong> places great importance on the protection of users' personal data. This Privacy Policy defines the procedure for processing information provided by visitors to <strong>mukaab.by</strong>.</p>
+<h2>1. General Provisions</h2>
+<p>This Policy is drawn up in accordance with the requirements of the legislation of the Republic of Belarus.</p>
+<h2>2. Personal Data We Collect</h2>
+<ul>
+<li>first and last name;</li>
+<li>phone number;</li>
+<li>email address;</li>
+<li>other data provided voluntarily.</li>
+</ul>
+<h2>3. Purposes of Data Processing</h2>
+<ul>
+<li>processing requests and feedback;</li>
+<li>providing information about services;</li>
+<li>preparation of commercial offers;</li>
+<li>improving site performance.</li>
+</ul>
+<div class="pm-contacts">
+<p><strong>Operator's Contact Details</strong></p>
+<p>Mukaab LLC</p>
+<p>Email: <strong>privacy@mukaab.by</strong></p>
+<p>Minsk, Melezh St. 1, office 405</p>
+</div>
+<div class="pm-footer">
+<span class="pm-badge">Current version</span>
+<span>© Mukaab LLC, all rights reserved</span>
+</div>`
+    }
+};
+
+/* ─── i18n ─── */
+const T = {
+    ru: {
+        nav1:'Главная', nav2:'Интерьеры', nav3:'Архитектура', nav4:'Услуги', nav5m:'Портфолио',
+        navCta:'Написать нам',
+        heroLabel:'Услуги',
+        title:'Авторский надзор',
+        subtitle:'Профессиональное сопровождение проекта на всех этапах реализации — от первого выезда до финальной приёмки.',
+        sec1:'Контроль и соответствие',
+        sec2:'Этапы работы',
+        sec3:'Где применяется',
+        s1h:'Выезды на объект',
+        s1a:'Регулярные плановые визиты',
+        s1b:'Контроль соответствия работ проекту',
+        s1c:'Проверка качества выполнения',
+        s1d:'Контроль применения материалов',
+        s2h:'Рабочая документация',
+        s2a:'Внесение корректировок по факту',
+        s2b:'Оперативное решение проектных вопросов',
+        s2c:'Согласование изменений с заказчиком',
+        s2d:'Актуализация чертежей и спецификаций',
+        s3h:'Полное сопровождение объекта',
+        s3desc:'Комплексный авторский надзор от начала строительства до финальной сдачи объекта:',
+        s3a:'Регулярные выезды на объект',
+        s3b:'Контроль всех строительных работ',
+        s3c:'Консультации подрядчиков и строителей',
+        s3d:'Координация смежных специалистов',
+        s3e:'Фото- и видеоотчёты о ходе работ',
+        s3f:'Участие в приёмке выполненных работ',
+        s3g:'Контроль сроков выполнения работ',
+        s3h2:'Сопровождение до завершения строительства',
+        steps_h:'Как проходит авторский надзор',
+        step1:'Знакомство с проектом и подрядчиками',
+        step2:'Составление графика выездов на объект',
+        step3:'Регулярный контроль хода строительства',
+        step4:'Фиксация замечаний и внесение корректировок',
+        step5:'Координация и решение проектных вопросов',
+        step6:'Финальная приёмка и закрытие объекта',
+        obj_h:'Типы объектов',
+        obj1:'Частные дома и виллы',
+        obj2:'Квартиры и апартаменты',
+        obj3:'Коммерческие объекты',
+        obj4:'Рестораны и кафе',
+        obj5:'Офисные помещения',
+        obj6:'Гостиничные комплексы',
+        rep_h:'Отчётность заказчику',
+        rep1:'Фотофиксация каждого выезда',
+        rep2:'Видеоотчёты о ходе строительства',
+        rep3:'Письменные замечания подрядчикам',
+        rep4:'Сводные акты по итогам проверок',
+        rep_note:'Прозрачность на каждом этапе',
+        res_h:'Результат',
+        res_text:'Гарантия того, что реализованный объект будет полностью соответствовать <strong>архитектурной концепции</strong>, проектной документации и <strong>стандартам качества</strong>. Вы получаете объект именно таким, каким он был задуман — без отступлений от проекта и скрытых дефектов.',
+        ctah:'Обсудим ваш проект?',
+        ctap:'Оставьте заявку — свяжемся в течение часа',
+        ctabtn:'Оставить заявку',
+        footsub:'Premium Architecture Studio'
+    },
+    en: {
+        nav1:'Home', nav2:'Interiors', nav3:'Architecture', nav4:'Services', nav5m:'Portfolio',
+        navCta:'Contact Us',
+        heroLabel:'Services',
+        title:'Construction Supervision',
+        subtitle:'Professional project management at every stage of realisation — from the first site visit to final sign-off.',
+        sec1:'Control & Compliance',
+        sec2:'How We Work',
+        sec3:'Applications',
+        s1h:'Site Visits',
+        s1a:'Regular scheduled inspections',
+        s1b:'Compliance with approved drawings',
+        s1c:'Quality control of workmanship',
+        s1d:'Verification of specified materials',
+        s2h:'Working Documentation',
+        s2a:'On-site corrections and amendments',
+        s2b:'Prompt resolution of design queries',
+        s2c:'Change approval with the client',
+        s2d:'Drawing and specification updates',
+        s3h:'Full Project Supervision',
+        s3desc:'Comprehensive construction supervision from groundbreaking to final handover:',
+        s3a:'Regular site visits',
+        s3b:'Control of all construction works',
+        s3c:'Advice to contractors and builders',
+        s3d:'Coordination of specialist trades',
+        s3e:'Photo and video progress reports',
+        s3f:'Participation in works sign-off',
+        s3g:'Monitoring of programme and deadlines',
+        s3h2:'Support until construction completion',
+        steps_h:'Supervision Process',
+        step1:'Project and contractor briefing',
+        step2:'Scheduling site visits',
+        step3:'Ongoing construction monitoring',
+        step4:'Recording issues and implementing corrections',
+        step5:'Coordination and resolution of design matters',
+        step6:'Final inspection and project close-out',
+        obj_h:'Project Types',
+        obj1:'Private houses and villas',
+        obj2:'Apartments and serviced units',
+        obj3:'Commercial properties',
+        obj4:'Restaurants and cafés',
+        obj5:'Office spaces',
+        obj6:'Hotel complexes',
+        rep_h:'Client Reporting',
+        rep1:'Photo documentation of every visit',
+        rep2:'Video progress updates',
+        rep3:'Written notices to contractors',
+        rep4:'Summary inspection reports',
+        rep_note:'Full transparency at every stage',
+        res_h:'Outcome',
+        res_text:'A guarantee that the completed project fully conforms to the <strong>architectural concept</strong>, project documentation and <strong>quality standards</strong>. You receive the building exactly as designed — with no deviations and no hidden defects.',
+        ctah:'Shall we discuss your project?',
+        ctap:"Leave a request — we'll respond within the hour",
+        ctabtn:'Send a request',
+        footsub:'Premium Architecture Studio'
+    }
+};
+
+let lang = 'ru';
+
+function toggleMenu() {
+    const menu   = document.getElementById('mobileMenu');
+    const burger = document.getElementById('burger');
+    const open   = menu.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+}
+
+document.querySelectorAll('.mobile-menu a').forEach(a => {
+    a.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.remove('open');
+        document.getElementById('burger').classList.remove('open');
+        document.body.style.overflow = '';
+    });
+});
+
+function setLang(l) {
+    lang = l;
+    document.getElementById('btn-ru').classList.toggle('active', l === 'ru');
+    document.getElementById('btn-en').classList.toggle('active', l === 'en');
+    document.getElementById('mob-btn-ru').classList.toggle('active', l === 'ru');
+    document.getElementById('mob-btn-en').classList.toggle('active', l === 'en');
+
+    const merged = Object.assign({}, T[l], PM[l]);
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const k = el.getAttribute('data-i18n');
+        if (merged[k] !== undefined) el.innerHTML = merged[k];
+    });
+
+    const overlay = document.getElementById('privacyOverlay');
+    if (overlay && overlay.style.visibility === 'visible') {
+        document.getElementById('pmBody').innerHTML = PM[l].body;
+    }
+
+    localStorage.setItem('lang', l);
+}
+
+function toggleContacts() {
+    document.getElementById('contactMenu').classList.toggle('active');
+}
+
+document.addEventListener('click', (e) => {
+    const dropdown = document.querySelector('.contact-dropdown');
+    const menu = document.getElementById('contactMenu');
+    if (!dropdown.contains(e.target)) menu.classList.remove('active');
+});
+
+function openPrivacy() {
+    const overlay = document.getElementById('privacyOverlay');
+    const modal   = document.getElementById('privacyModal');
+    document.getElementById('pmBody').innerHTML = PM[lang].body;
+    overlay.style.opacity = '1';
+    overlay.style.visibility = 'visible';
+    modal.style.transform = 'translateY(0) scale(1)';
+    document.body.style.overflow = 'hidden';
+}
+
+function closePrivacy() {
+    const overlay = document.getElementById('privacyOverlay');
+    const modal   = document.getElementById('privacyModal');
+    overlay.style.opacity = '0';
+    overlay.style.visibility = 'hidden';
+    modal.style.transform = 'translateY(24px) scale(.97)';
+    document.body.style.overflow = '';
+}
+
+document.getElementById('privacyOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closePrivacy();
+});
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePrivacy(); });
+
+function toggleMobileContacts() {
+    document.getElementById('mobileContactMenu').classList.toggle('active');
+}
+
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+const saved = localStorage.getItem('lang');
+if (saved) setLang(saved);
+</script>
+</body>
+</html>
